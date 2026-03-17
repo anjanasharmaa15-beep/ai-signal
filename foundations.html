@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Signal — Foundations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --white:#ffffff;--black:#0a0a0a;--gray-50:#f9f9f8;--gray-100:#f0efeb;--gray-200:#e4e3de;--gray-400:#a3a29d;--gray-600:#6b6a66;--gray-800:#2c2c2a;--serif:'DM Serif Display',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif; }
+  body { font-family:var(--sans);background:var(--white);color:var(--black);font-size:15px;line-height:1.6;min-height:100vh; }
+
+  nav { display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2.5rem;border-bottom:0.5px solid var(--gray-200);position:sticky;top:0;background:rgba(255,255,255,0.97);backdrop-filter:blur(8px);z-index:100; }
+  .nav-logo { font-family:var(--serif);font-size:1.35rem;color:var(--black);text-decoration:none;letter-spacing:-0.02em; }
+  .nav-links { display:flex;align-items:center;gap:2rem;list-style:none; }
+  .nav-links a { font-size:0.875rem;color:var(--gray-600);text-decoration:none;transition:color 0.15s; }
+  .nav-links a:hover { color:var(--black); }
+  .nav-links a.active { color:var(--black);font-weight:500; }
+  .nav-role-pill { display:flex;align-items:center;gap:0.5rem;background:var(--gray-100);border:0.5px solid var(--gray-200);border-radius:100px;padding:0.3rem 0.9rem;font-size:0.8rem;font-weight:500;color:var(--gray-800);cursor:pointer; }
+  .role-dot { width:6px;height:6px;border-radius:50%;background:var(--black); }
+
+  .page-hero { padding:3.5rem 2.5rem 2rem;max-width:860px;border-bottom:0.5px solid var(--gray-200); }
+  .hero-eyebrow { font-size:0.78rem;font-weight:500;letter-spacing:0.08em;color:var(--gray-400);text-transform:uppercase;margin-bottom:0.75rem; }
+  .page-hero h1 { font-family:var(--serif);font-size:clamp(1.75rem,3.5vw,2.5rem);line-height:1.15;letter-spacing:-0.02em;margin-bottom:1rem; }
+  .page-hero h1 em { font-style:italic;color:var(--gray-600); }
+  .page-hero p { font-size:0.95rem;color:var(--gray-600);max-width:560px;line-height:1.65; }
+
+  .role-selector { padding:1.25rem 2.5rem;border-bottom:0.5px solid var(--gray-200);background:var(--gray-50); }
+  .role-label { font-size:0.75rem;font-weight:500;color:var(--gray-400);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem; }
+  .role-pills { display:flex;gap:0.5rem;flex-wrap:wrap; }
+  .role-pill { padding:0.4rem 1rem;border-radius:100px;border:0.5px solid var(--gray-200);background:var(--white);font-size:0.82rem;color:var(--gray-600);cursor:pointer;transition:all 0.15s; }
+  .role-pill:hover { border-color:var(--gray-400);color:var(--black); }
+  .role-pill.active { background:var(--black);color:var(--white);border-color:var(--black); }
+
+  .main-layout { display:grid;grid-template-columns:220px 1fr;max-width:1200px;margin:0 auto; }
+
+  .sidebar-nav { padding:2rem 1.5rem;border-right:0.5px solid var(--gray-200);position:sticky;top:73px;height:calc(100vh - 73px);overflow-y:auto; }
+  .sidebar-nav-heading { font-size:0.7rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:0.5px solid var(--gray-200); }
+  .sidebar-nav-item { display:block;padding:0.5rem 0.75rem;font-size:0.82rem;color:var(--gray-600);text-decoration:none;border-radius:6px;margin-bottom:0.2rem;cursor:pointer;transition:all 0.15s;border:none;background:none;font-family:var(--sans);width:100%;text-align:left; }
+  .sidebar-nav-item:hover { background:var(--gray-100);color:var(--black); }
+  .sidebar-nav-item.active { background:var(--gray-100);color:var(--black);font-weight:500; }
+
+  .content { padding:2.5rem; }
+
+  .section-intro { margin-bottom:2.5rem; }
+  .section-label { font-size:0.72rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:0.5rem; }
+  .section-title { font-family:var(--serif);font-size:1.5rem;letter-spacing:-0.01em;margin-bottom:0.75rem; }
+  .section-desc { font-size:0.9rem;color:var(--gray-600);line-height:1.65;max-width:600px; }
+
+  .foundations-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin-bottom:3rem; }
+
+  .foundation-card { border:0.5px solid var(--gray-200);border-radius:12px;padding:1.5rem;background:var(--white);cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden; }
+  .foundation-card:hover { border-color:var(--gray-400);box-shadow:0 4px 20px rgba(0,0,0,0.07);transform:translateY(-1px); }
+  .foundation-card::before { content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--black));border-radius:12px 12px 0 0; }
+
+  .card-category { font-size:0.7rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--gray-400);margin-bottom:0.75rem; }
+  .card-title { font-family:var(--serif);font-size:1.05rem;line-height:1.35;letter-spacing:-0.01em;margin-bottom:0.5rem;color:var(--black); }
+  .card-author { font-size:0.78rem;color:var(--gray-400);margin-bottom:0.75rem; }
+  .card-summary { font-size:0.83rem;color:var(--gray-600);line-height:1.6;margin-bottom:1rem; }
+  .card-why { font-size:0.78rem;color:var(--gray-800);line-height:1.55;background:var(--gray-50);border-radius:6px;padding:0.65rem 0.75rem;border-left:2px solid var(--gray-200); }
+  .card-why strong { font-weight:500;color:var(--black); }
+  .card-tags { display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:1rem; }
+  .card-tag { padding:0.15rem 0.6rem;border-radius:100px;font-size:0.7rem;font-weight:500;background:var(--gray-100);color:var(--gray-600); }
+  .card-footer { display:flex;align-items:center;justify-content:space-between;margin-top:1rem;padding-top:0.75rem;border-top:0.5px solid var(--gray-100); }
+  .card-source { font-size:0.75rem;font-weight:500;color:var(--gray-600); }
+  .card-read { font-size:0.75rem;color:var(--gray-400);text-decoration:none;transition:color 0.15s; }
+  .card-read:hover { color:var(--black); }
+
+  .coming-soon { padding:3rem;text-align:center;border:0.5px dashed var(--gray-200);border-radius:12px;color:var(--gray-400); }
+  .coming-soon p { font-family:var(--serif);font-size:1.1rem;font-style:italic;margin-bottom:0.5rem; }
+  .coming-soon small { font-size:0.8rem; }
+
+  @media(max-width:900px){ .main-layout{grid-template-columns:1fr;} .sidebar-nav{display:none;} }
+  @media(max-width:600px){ nav{padding:1rem 1.25rem;} .page-hero,.role-selector,.content{padding-left:1.25rem;padding-right:1.25rem;} .foundations-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">AI Signal</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Browse</a></li>
+    <li><a href="index.html">Search</a></li>
+    <li><a href="foundations.html" class="active">Foundations</a></li>
+    <li><a href="#">Digest</a></li>
+  </ul>
+  <div class="nav-role-pill">
+    <div class="role-dot"></div>
+    <span id="nav-role-label">AI Product Manager</span>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="hero-eyebrow">Foundations</div>
+  <h1>The canon for<br><em>your role in AI.</em></h1>
+  <p>Not news. Not tutorials. The timeless frameworks, papers, and principles every AI professional in your role should know deeply — curated by AI, filtered by role.</p>
+</div>
+
+<div class="role-selector">
+  <div class="role-label">Viewing as</div>
+  <div class="role-pills">
+    <div class="role-pill active" onclick="selectRole(this,'pm')">AI Product Manager</div>
+    <div class="role-pill" onclick="selectRole(this,'eng')">ML / AI Engineer</div>
+    <div class="role-pill" onclick="selectRole(this,'research')">AI Researcher</div>
+    <div class="role-pill" onclick="selectRole(this,'biz')">Business Leader</div>
+  </div>
+</div>
+
+<div class="main-layout">
+  <nav class="sidebar-nav">
+    <div class="sidebar-nav-heading">On this page</div>
+    <button class="sidebar-nav-item active" onclick="scrollTo('behaviour')">Behaviour & Change</button>
+    <button class="sidebar-nav-item" onclick="scrollTo('prompting')">Prompting & AI Interaction</button>
+    <button class="sidebar-nav-item" onclick="scrollTo('product')">Product Thinking</button>
+    <button class="sidebar-nav-item" onclick="scrollTo('strategy')">AI Strategy</button>
+    <button class="sidebar-nav-item" onclick="scrollTo('ethics')">Ethics & Safety</button>
+  </nav>
+
+  <div class="content" id="foundations-content">
+    <!-- Rendered by JS -->
+  </div>
+</div>
+
+<script>
+const FOUNDATIONS = {
+  pm: [
+    {
+      section: 'Behaviour & Change',
+      id: 'behaviour',
+      desc: 'Frameworks for understanding how people adopt, resist, and adapt to new technology — essential for AI PMs driving enterprise adoption.',
+      cards: [
+        {
+          title: "Neurological Levels of Change",
+          author: "Robert Dilts",
+          category: "Behavioural Framework",
+          accent: "#1a1a1a",
+          summary: "A hierarchical model explaining why change efforts fail at the wrong level. Identity-level changes (who I am) are more durable than environment-level changes (what surrounds me). Most AI adoption fails because it targets behaviour without addressing identity and belief.",
+          why: "When your enterprise AI rollout stalls, it's rarely a tool problem — it's a belief problem. Users don't see themselves as 'AI users'. This framework helps you diagnose where resistance is coming from and design enablement at the right level.",
+          tags: ["Adoption", "Change Management", "Enterprise"],
+          source: "NLP / Organisational Psychology",
+          url: "#"
+        },
+        {
+          title: "Diffusion of Innovations",
+          author: "Everett Rogers",
+          category: "Adoption Framework",
+          accent: "#2563eb",
+          summary: "The classic model explaining how new ideas spread through populations — from innovators to laggards. Defines the chasm between early adopters and the early majority that kills most new technologies.",
+          why: "Every AI product you build will face this curve. Understanding where your users sit on it — and designing features that help early adopters demonstrate value to the majority — is a core AI PM skill.",
+          tags: ["Adoption", "GTM", "Product Strategy"],
+          source: "Free Press, 1962",
+          url: "#"
+        }
+      ]
+    },
+    {
+      section: 'Prompting & AI Interaction',
+      id: 'prompting',
+      desc: 'How to get the most out of AI systems — and how to teach others to do the same. Foundational for any PM working on or with AI products.',
+      cards: [
+        {
+          title: "Anthropic Prompt Engineering Guide",
+          author: "Anthropic",
+          category: "Official Reference",
+          accent: "#d97706",
+          summary: "Anthropic's comprehensive guide to prompting Claude effectively. Covers prompt structure, role-setting, chain-of-thought reasoning, XML tags for structure, and handling edge cases. The authoritative reference for working with Claude models.",
+          why: "If you're a PM building on or demoing Claude, this is required reading. Understanding how prompting works makes you a better product designer, a better evaluator of outputs, and more credible with your engineering team.",
+          tags: ["Prompting", "Claude", "Anthropic", "Reference"],
+          source: "docs.anthropic.com",
+          url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
+        },
+        {
+          title: "26 Prompt Principles for LLMs",
+          author: "Bsharat et al. (arXiv)",
+          category: "Research Paper",
+          accent: "#7c3aed",
+          summary: "A research paper distilling 26 actionable principles for prompting large language models effectively. Covers clarity, specificity, persona assignment, step-by-step reasoning, and avoiding common failure modes. Empirically tested across multiple models.",
+          why: "A practical reference you can share with your team, use in enablement workshops, and apply directly when writing system prompts for your AI product. Bridges research and practice cleanly.",
+          tags: ["Prompting", "Research", "Practical"],
+          source: "arXiv:2312.16171",
+          url: "https://arxiv.org/abs/2312.16171"
+        },
+        {
+          title: "Model Context Protocol (MCP) — Specification",
+          author: "Anthropic",
+          category: "Technical Standard",
+          accent: "#0891b2",
+          summary: "The open standard that defines how AI models connect to external tools, data sources, and services. MCP is becoming the infrastructure layer of the agentic AI ecosystem — the USB-C of AI tool integration.",
+          why: "As an AI PM, you don't need to implement MCP — but you need to understand what it is, why it matters, and how it changes what's possible for your product. This is the foundational read for anyone building agentic features.",
+          tags: ["MCP", "Agentic AI", "Infrastructure"],
+          source: "Anthropic / modelcontextprotocol.io",
+          url: "https://modelcontextprotocol.io"
+        }
+      ]
+    },
+    {
+      section: 'Product Thinking',
+      id: 'product',
+      desc: 'Core product management frameworks — applied specifically to AI product contexts.',
+      cards: [
+        {
+          title: "Inspired: How to Create Tech Products Customers Love",
+          author: "Marty Cagan",
+          category: "Product Management",
+          accent: "#16a34a",
+          summary: "The definitive PM book. Covers continuous discovery, outcome vs. output thinking, the role of product vision, and how great product teams work. Cagan's framework for what separates strong PMs from weak ones is as relevant for AI products as any other.",
+          why: "The discovery mindset Cagan describes — continuous user contact, hypothesis-driven roadmaps, outcome focus — is especially critical for AI products where the technology is new and user behaviour is still forming.",
+          tags: ["Product Discovery", "Roadmap", "Classic"],
+          source: "Wiley, 2017",
+          url: "#"
+        },
+        {
+          title: "Jobs To Be Done Framework",
+          author: "Clayton Christensen",
+          category: "Product Framework",
+          accent: "#dc2626",
+          summary: "Users don't buy products — they hire them to do a job. JTBD reframes product design around the outcome the user wants, not the feature they're asking for. Especially powerful for AI products where the 'job' is often poorly defined.",
+          why: "When a user asks for 'a better search', the job might actually be 'help me look credible in the meeting'. AI products that understand the real job — not the stated request — are the ones that create genuine value.",
+          tags: ["Discovery", "User Research", "Strategy"],
+          source: "Harvard Business Review",
+          url: "#"
+        },
+        {
+          title: "Shape of AI — UX Patterns for AI Products",
+          author: "Emily Campbell",
+          category: "Design Reference",
+          accent: "#1a1a1a",
+          summary: "A living library of UX patterns specific to AI product design — Wayfinders, Governors, Trust Builders, Identifiers, and more. Documents how leading AI products handle prompting, transparency, human-in-the-loop, and onboarding.",
+          why: "When you're designing features for an AI product, you don't have to start from scratch. This library is your reference for what good AI UX looks like, with real examples from Claude, Notion AI, Copilot, and others.",
+          tags: ["UX Design", "AI Products", "Reference"],
+          source: "shapeof.ai",
+          url: "https://www.shapeof.ai"
+        }
+      ]
+    },
+    {
+      section: 'AI Strategy',
+      id: 'strategy',
+      desc: 'How to think about AI at a strategic level — for PMs shaping roadmaps and influencing organisational direction.',
+      cards: [
+        {
+          title: "AI Canon — Essential AI Reading List",
+          author: "Andreessen Horowitz (a16z)",
+          category: "Curated Reading List",
+          accent: "#1a1a1a",
+          summary: "A16z's curated list of the most important papers, blog posts, and resources for understanding modern AI — from transformers to diffusion models to large language models. Organised by topic and depth.",
+          why: "As a PM, you don't need to read every paper — but knowing which papers matter and why gives you credibility with researchers and engineers, and sharpens your intuition for what's technically possible.",
+          tags: ["AI Fundamentals", "Strategy", "Reading List"],
+          source: "a16z.com",
+          url: "https://a16z.com/ai-canon"
+        },
+        {
+          title: "Anthropic's Core Views on AI Safety and Development",
+          author: "Anthropic",
+          category: "Company Philosophy",
+          accent: "#d97706",
+          summary: "Anthropic's public articulation of how they think about AI safety, capability development, and the responsible path to powerful AI. Covers Constitutional AI, RLHF, and the reasoning behind their research priorities.",
+          why: "If you're building enterprise AI products, customers will ask you about safety, bias, and responsible AI. Understanding how the leading labs think about these questions makes you a more informed PM and a better advocate for your users.",
+          tags: ["AI Safety", "Ethics", "Anthropic"],
+          source: "Anthropic",
+          url: "https://www.anthropic.com/company"
+        }
+      ]
+    },
+    {
+      section: 'Ethics & Safety',
+      id: 'ethics',
+      desc: 'The ethical and safety dimensions of AI that every PM building in this space needs to understand.',
+      cards: [
+        {
+          title: "EU AI Act — What Product Managers Need to Know",
+          author: "European Parliament",
+          category: "Regulation",
+          accent: "#1d4ed8",
+          summary: "The world's first comprehensive AI regulation framework, classifying AI systems by risk level and imposing requirements on high-risk applications. Came into force in 2024 with phased implementation through 2027.",
+          why: "If your product touches EU customers, this is not optional reading. Understanding the risk tiers, prohibited practices, and documentation requirements will shape your roadmap and your enterprise sales conversations.",
+          tags: ["Regulation", "Compliance", "Europe"],
+          source: "European Parliament, 2024",
+          url: "#"
+        },
+        {
+          title: "Anthropic's Responsible Scaling Policy",
+          author: "Anthropic",
+          category: "Safety Framework",
+          accent: "#7c3aed",
+          summary: "Anthropic's commitment to evaluate AI capabilities at each stage of development and apply safety measures before scaling further. Introduces the concept of AI Safety Levels (ASL) as a framework for responsible deployment.",
+          why: "Understanding how frontier labs self-regulate helps you anticipate what capabilities will and won't be available to build on — and gives you vocabulary for conversations about AI risk with enterprise customers and executives.",
+          tags: ["AI Safety", "Policy", "Anthropic"],
+          source: "Anthropic",
+          url: "https://www.anthropic.com/responsible-scaling-policy"
+        }
+      ]
+    }
+  ],
+  eng: [
+    {
+      section: 'Core ML Foundations',
+      id: 'behaviour',
+      desc: 'The papers and resources every ML engineer should have read.',
+      cards: [
+        {
+          title: "Attention Is All You Need",
+          author: "Vaswani et al. (Google Brain)",
+          category: "Foundational Paper",
+          accent: "#1a1a1a",
+          summary: "The 2017 paper that introduced the Transformer architecture — the foundation of every modern LLM. If you work with language models and haven't read the original paper, this is the gap to close.",
+          why: "Understanding the attention mechanism at a conceptual level makes you a better engineer when debugging model behaviour, evaluating architectures, and explaining tradeoffs to non-technical stakeholders.",
+          tags: ["Transformers", "Architecture", "Foundational"],
+          source: "arXiv:1706.03762",
+          url: "https://arxiv.org/abs/1706.03762"
+        },
+        {
+          title: "The Illustrated Transformer",
+          author: "Jay Alammar",
+          category: "Visual Explainer",
+          accent: "#2563eb",
+          summary: "The best visual explanation of how Transformers work — step by step, with clear diagrams. Covers self-attention, multi-head attention, positional encoding, and the encoder-decoder architecture.",
+          why: "If the original paper is dense, this is the companion piece that makes it click. Used as a reference by engineers and researchers worldwide.",
+          tags: ["Transformers", "Visual", "Reference"],
+          source: "jalammar.github.io",
+          url: "https://jalammar.github.io/illustrated-transformer/"
+        }
+      ]
+    },
+    {
+      section: 'Prompting & AI Interaction',
+      id: 'prompting',
+      desc: 'How to work with LLMs effectively at an implementation level.',
+      cards: [
+        {
+          title: "Anthropic Prompt Engineering Guide",
+          author: "Anthropic",
+          category: "Official Reference",
+          accent: "#d97706",
+          summary: "The authoritative guide to prompting Claude — covering system prompts, role-setting, XML structure, chain-of-thought, and tool use. Essential for engineers building on Claude API.",
+          why: "Knowing how to write effective system prompts is as important as knowing how to write clean code when building LLM-powered features. This is the reference.",
+          tags: ["Prompting", "Claude", "API"],
+          source: "docs.anthropic.com",
+          url: "https://docs.anthropic.com"
+        }
+      ]
+    },
+    {
+      section: 'Product Thinking',
+      id: 'product',
+      desc: 'Engineering foundations for building reliable, production-grade AI systems.',
+      cards: [
+        {
+          title: "Building LLM Applications for Production",
+          author: "Chip Huyen",
+          category: "Engineering Guide",
+          accent: "#16a34a",
+          summary: "A comprehensive guide to the challenges of moving LLM applications from prototype to production — covering hallucination, latency, cost, evaluation, and deployment patterns.",
+          why: "The gap between a demo and a production system is enormous for LLM apps. This is the most practical engineering guide for crossing that gap.",
+          tags: ["Production", "LLMOps", "Engineering"],
+          source: "huyenchip.com",
+          url: "https://huyenchip.com/2023/04/11/llm-engineering.html"
+        }
+      ]
+    },
+    {
+      section: 'AI Strategy', id: 'strategy', desc: '', cards: []
+    },
+    {
+      section: 'Ethics & Safety', id: 'ethics', desc: '', cards: []
+    }
+  ],
+  research: [
+    {
+      section: 'Behaviour & Change', id: 'behaviour', desc: '', cards: []
+    },
+    {
+      section: 'Prompting & AI Interaction', id: 'prompting', desc: 'Core research on how models process and respond to instructions.', cards: [
+        {
+          title: "26 Prompt Principles for LLMs",
+          author: "Bsharat et al.",
+          category: "Research Paper",
+          accent: "#7c3aed",
+          summary: "Empirically tested principles for prompting LLMs effectively. Covers 26 principles derived from systematic experimentation across multiple frontier models.",
+          why: "A rigorous empirical baseline for prompt design research. Useful as a reference and as a starting point for further experimentation.",
+          tags: ["Prompting", "Empirical", "Research"],
+          source: "arXiv:2312.16171",
+          url: "https://arxiv.org/abs/2312.16171"
+        }
+      ]
+    },
+    {
+      section: 'Product Thinking', id: 'product', desc: '', cards: []
+    },
+    {
+      section: 'AI Strategy', id: 'strategy', desc: '', cards: []
+    },
+    {
+      section: 'Ethics & Safety', id: 'ethics', desc: 'The safety research every AI researcher should be familiar with.', cards: [
+        {
+          title: "Constitutional AI: Harmlessness from AI Feedback",
+          author: "Anthropic",
+          category: "Research Paper",
+          accent: "#d97706",
+          summary: "Anthropic's paper introducing Constitutional AI — a method for training AI systems to be helpful, harmless, and honest using AI feedback rather than human labels alone. Foundational for understanding RLHF variants.",
+          why: "The most influential safety alignment paper of the current era. Understanding Constitutional AI is essential context for any researcher working on alignment, evaluation, or deployment of large models.",
+          tags: ["Alignment", "Safety", "RLHF", "Anthropic"],
+          source: "arXiv:2212.08073",
+          url: "https://arxiv.org/abs/2212.08073"
+        }
+      ]
+    }
+  ],
+  biz: [
+    {
+      section: 'Behaviour & Change', id: 'behaviour', desc: 'Frameworks for leading AI transformation at an organisational level.', cards: [
+        {
+          title: "Neurological Levels of Change",
+          author: "Robert Dilts",
+          category: "Behavioural Framework",
+          accent: "#1a1a1a",
+          summary: "A hierarchical model explaining why transformation efforts fail or succeed. Change at the identity level (who we are as a company) is far more durable than change at the behaviour or environment level.",
+          why: "Most AI transformation programmes fail not because the tools are wrong but because leaders try to change behaviour without changing culture. This framework diagnoses where your transformation is stuck.",
+          tags: ["Change Management", "Leadership", "Transformation"],
+          source: "NLP / Organisational Psychology",
+          url: "#"
+        }
+      ]
+    },
+    {
+      section: 'Prompting & AI Interaction', id: 'prompting', desc: '', cards: []
+    },
+    {
+      section: 'Product Thinking', id: 'product', desc: '', cards: []
+    },
+    {
+      section: 'AI Strategy', id: 'strategy', desc: 'How business leaders should think about AI investment and competitive positioning.', cards: [
+        {
+          title: "BCG AI Maturity Model",
+          author: "Boston Consulting Group",
+          category: "Strategy Framework",
+          accent: "#1d4ed8",
+          summary: "BCG's framework for assessing how mature an organisation's AI capabilities are — from ad hoc experimentation to fully integrated AI-first operations. Used by C-suite leaders to benchmark and plan AI investment.",
+          why: "Gives you a common language for discussing AI maturity with your board, your investors, and your leadership team. Essential for setting realistic expectations and sequencing your AI investments correctly.",
+          tags: ["Strategy", "Maturity", "Executive"],
+          source: "BCG",
+          url: "#"
+        }
+      ]
+    },
+    {
+      section: 'Ethics & Safety', id: 'ethics', desc: '', cards: []
+    }
+  ]
+};
+
+let currentRole = 'pm';
+
+function renderFoundations(role) {
+  const sections = FOUNDATIONS[role] || [];
+  const content = document.getElementById('foundations-content');
+  content.innerHTML = sections.map(section => {
+    const visibleCards = section.cards.filter(c => c);
+    if (visibleCards.length === 0) return '';
+    return `
+      <div class="section-intro" id="${section.id}">
+        <div class="section-label">Foundations · ${section.section}</div>
+        <div class="section-title">${section.section}</div>
+        ${section.desc ? `<div class="section-desc">${section.desc}</div>` : ''}
+      </div>
+      <div class="foundations-grid">
+        ${visibleCards.map(card => `
+          <div class="foundation-card" style="--card-accent:${card.accent}" onclick="window.open('${card.url}')">
+            <div class="card-category">${card.category}</div>
+            <div class="card-title">${card.title}</div>
+            <div class="card-author">— ${card.author}</div>
+            <div class="card-summary">${card.summary}</div>
+            <div class="card-why"><strong>Why this matters for you:</strong> ${card.why}</div>
+            <div class="card-tags">${card.tags.map(t => `<span class="card-tag">${t}</span>`).join('')}</div>
+            <div class="card-footer">
+              <span class="card-source">${card.source}</span>
+              <a class="card-read" href="${card.url}" onclick="event.stopPropagation()">Read →</a>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }).join('');
+}
+
+function selectRole(el, role) {
+  document.querySelectorAll('.role-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  currentRole = role;
+  const labels = { pm: 'AI Product Manager', eng: 'ML / AI Engineer', research: 'AI Researcher', biz: 'Business Leader' };
+  document.getElementById('nav-role-label').textContent = labels[role];
+  renderFoundations(role);
+}
+
+function scrollTo(id) {
+  document.querySelectorAll('.sidebar-nav-item').forEach(i => i.classList.remove('active'));
+  event.target.classList.add('active');
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+renderFoundations('pm');
+</script>
+</body>
+</html>
