@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Signal — The AI Knowledge Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --white:#ffffff;--black:#0a0a0a;--gray-50:#f9f9f8;--gray-100:#f0efeb;--gray-200:#e4e3de;--gray-400:#a3a29d;--gray-600:#6b6a66;--gray-800:#2c2c2a;--serif:'DM Serif Display',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif; }
+  body { font-family:var(--sans);background:var(--white);color:var(--black);font-size:15px;line-height:1.6;min-height:100vh; }
+  nav { display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2.5rem;border-bottom:0.5px solid var(--gray-200);position:sticky;top:0;background:rgba(255,255,255,0.97);backdrop-filter:blur(8px);z-index:100; }
+  .nav-logo { font-family:var(--serif);font-size:1.35rem;color:var(--black);text-decoration:none;letter-spacing:-0.02em; }
+  .nav-links { display:flex;align-items:center;gap:2rem;list-style:none; }
+  .nav-links a { font-size:0.875rem;color:var(--gray-600);text-decoration:none;transition:color 0.15s; }
+  .nav-links a:hover { color:var(--black); }
+  .nav-role-pill { display:flex;align-items:center;gap:0.5rem;background:var(--gray-100);border:0.5px solid var(--gray-200);border-radius:100px;padding:0.3rem 0.9rem;font-size:0.8rem;font-weight:500;color:var(--gray-800);cursor:pointer; }
+  .role-dot { width:6px;height:6px;border-radius:50%;background:var(--black); }
+  .hero { padding:4rem 2.5rem 2.5rem;max-width:860px; }
+  .hero-eyebrow { font-size:0.78rem;font-weight:500;letter-spacing:0.08em;color:var(--gray-400);text-transform:uppercase;margin-bottom:1rem; }
+  .hero h1 { font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);line-height:1.1;letter-spacing:-0.02em;color:var(--black);margin-bottom:1.25rem; }
+  .hero h1 em { font-style:italic;color:var(--gray-600); }
+  .hero-sub { font-size:0.95rem;color:var(--gray-600);max-width:540px;line-height:1.65; }
+  .search-bar { display:flex;align-items:center;margin:2rem 2.5rem;max-width:680px;border:1px solid var(--gray-200);border-radius:8px;overflow:hidden;transition:border-color 0.2s,box-shadow 0.2s;background:var(--white); }
+  .search-bar:focus-within { border-color:var(--gray-600);box-shadow:0 0 0 3px rgba(0,0,0,0.06); }
+  .search-icon { padding:0 0.875rem;color:var(--gray-400);font-size:1rem;flex-shrink:0; }
+  .search-input { flex:1;border:none;outline:none;font-family:var(--sans);font-size:0.9rem;color:var(--black);padding:0.8rem 0;background:transparent; }
+  .search-input::placeholder { color:var(--gray-400); }
+  .search-btn { background:var(--black);color:var(--white);border:none;padding:0.75rem 1.25rem;font-family:var(--sans);font-size:0.82rem;font-weight:500;cursor:pointer;transition:background 0.15s;flex-shrink:0; }
+  .search-btn:hover { background:var(--gray-800); }
+  .search-btn:disabled { background:var(--gray-400);cursor:not-allowed; }
+  .role-selector { padding:1.25rem 2.5rem;border-bottom:0.5px solid var(--gray-200);border-top:0.5px solid var(--gray-200);background:var(--gray-50); }
+  .role-label { font-size:0.75rem;font-weight:500;color:var(--gray-400);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem; }
+  .role-pills { display:flex;gap:0.5rem;flex-wrap:wrap; }
+  .role-pill { padding:0.4rem 1rem;border-radius:100px;border:0.5px solid var(--gray-200);background:var(--white);font-size:0.82rem;color:var(--gray-600);cursor:pointer;transition:all 0.15s; }
+  .role-pill:hover { border-color:var(--gray-400);color:var(--black); }
+  .role-pill.active { background:var(--black);color:var(--white);border-color:var(--black); }
+  .category-tabs { display:flex;padding:0 2.5rem;border-bottom:0.5px solid var(--gray-200);overflow-x:auto;scrollbar-width:none; }
+  .category-tabs::-webkit-scrollbar { display:none; }
+  .cat-tab { padding:1rem 1.25rem;font-size:0.82rem;color:var(--gray-400);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--sans); }
+  .cat-tab:hover { color:var(--black); }
+  .cat-tab.active { color:var(--black);border-bottom-color:var(--black);font-weight:500; }
+  .main { display:grid;grid-template-columns:1fr 300px;max-width:1200px;margin:0 auto; }
+  .feed { padding:2rem 2.5rem;border-right:0.5px solid var(--gray-200);min-height:600px; }
+  .feed-header { display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.75rem; }
+  .feed-title { font-family:var(--serif);font-size:1.25rem;letter-spacing:-0.01em; }
+  .feed-meta { font-size:0.78rem;color:var(--gray-400); }
+  .item-card { display:grid;grid-template-columns:1fr auto;gap:1rem;padding:1.5rem 0;border-bottom:0.5px solid var(--gray-200);cursor:pointer; }
+  .item-card:hover .item-title { text-decoration:underline;text-decoration-color:var(--gray-400); }
+  .item-tags { display:flex;gap:0.4rem;margin-bottom:0.6rem;flex-wrap:wrap; }
+  .tag { display:inline-block;padding:0.15rem 0.6rem;border-radius:100px;font-size:0.72rem;font-weight:500;background:var(--gray-100);color:var(--gray-800); }
+  .tag-news{background:#fef3c7;color:#92400e;}.tag-tutorial{background:#dbeafe;color:#1e40af;}.tag-paper{background:#ede9fe;color:#5b21b6;}.tag-product{background:#dcfce7;color:#166534;}.tag-github{background:#fce7f3;color:#9d174d;}
+  .item-title { font-family:var(--serif);font-size:1.05rem;line-height:1.35;letter-spacing:-0.01em;color:var(--black);margin-bottom:0.5rem; }
+  .item-summary { font-size:0.85rem;color:var(--gray-600);line-height:1.6;margin-bottom:0.65rem; }
+  .item-meta { display:flex;align-items:center;gap:0.75rem;font-size:0.75rem;color:var(--gray-400); }
+  .item-source { font-weight:500;color:var(--gray-600); }
+  .item-relevance { font-size:0.72rem;color:var(--gray-400);font-style:italic; }
+  .item-arrow { font-size:1rem;color:var(--gray-400);align-self:flex-start;margin-top:0.25rem;transition:transform 0.15s,color 0.15s; }
+  .item-card:hover .item-arrow { transform:translate(2px,-2px);color:var(--black); }
+  .sidebar { padding:2rem 1.75rem; }
+  .sidebar-section { margin-bottom:2.5rem; }
+  .sidebar-heading { font-size:0.72rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:0.5px solid var(--gray-200); }
+  .trending-item { display:flex;gap:0.75rem;align-items:flex-start;padding:0.65rem 0;border-bottom:0.5px solid var(--gray-100);cursor:pointer; }
+  .trending-num { font-family:var(--serif);font-size:1.1rem;color:var(--gray-200);font-style:italic;line-height:1;flex-shrink:0;margin-top:0.1rem; }
+  .trending-title { font-size:0.83rem;color:var(--gray-800);line-height:1.4; }
+  .trending-item:hover .trending-title { color:var(--black); }
+  .domain-tag { display:inline-block;padding:0.2rem 0.65rem;border-radius:4px;font-size:0.72rem;background:var(--gray-100);color:var(--gray-600);margin:0.2rem 0.2rem 0 0;cursor:pointer;transition:background 0.15s,color 0.15s; }
+  .domain-tag:hover { background:var(--black);color:var(--white); }
+  .loading { display:flex;align-items:center;gap:0.75rem;padding:2rem 0;color:var(--gray-400);font-size:0.875rem; }
+  .spinner { width:16px;height:16px;border:1.5px solid var(--gray-200);border-top-color:var(--black);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .result-card { padding:1.5rem;border:0.5px solid var(--gray-200);border-radius:10px;margin-bottom:1rem;background:var(--white);transition:border-color 0.15s,box-shadow 0.15s;cursor:pointer; }
+  .result-card:hover { border-color:var(--gray-400);box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+  .result-title { font-family:var(--serif);font-size:1.05rem;letter-spacing:-0.01em;margin-bottom:0.5rem;color:var(--black); }
+  .result-body { font-size:0.875rem;color:var(--gray-600);line-height:1.65;margin-bottom:0.75rem; }
+  .search-status { font-size:0.8rem;color:var(--gray-400);margin-bottom:1.5rem; }
+  .search-status span { font-weight:500;color:var(--black); }
+  .empty-state { padding:3rem 0;text-align:center;color:var(--gray-400); }
+  .empty-state p { font-family:var(--serif);font-size:1.1rem;font-style:italic;margin-bottom:0.5rem; }
+  @media(max-width:768px){.main{grid-template-columns:1fr;}.sidebar{display:none;}nav{padding:1rem 1.25rem;}.hero,.search-bar{padding-left:1.25rem;padding-right:1.25rem;}.search-bar{margin-left:1.25rem;margin-right:1.25rem;}.category-tabs{padding:0 1.25rem;}.feed{padding:1.5rem 1.25rem;}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="#">AI Signal</a>
+  <ul class="nav-links"><li><a href="#">Browse</a></li><li><a href="#">Search</a></li><li><a href="#">Digest</a></li></ul>
+  <div class="nav-role-pill"><div class="role-dot"></div><span id="nav-role-label">AI Product Manager</span></div>
+</nav>
+<div class="hero">
+  <div class="hero-eyebrow">The AI knowledge library</div>
+  <h1>Everything in AI.<br><em>Filtered for your role.</em></h1>
+  <p class="hero-sub">News, tutorials, research papers, product launches, and GitHub repositories — automatically classified and surfaced for how you work.</p>
+</div>
+<div class="search-bar">
+  <div class="search-icon">⌕</div>
+  <input class="search-input" id="search-input" type="text" placeholder="Search the library — e.g. 'best agentic frameworks for enterprise'" />
+  <button class="search-btn" id="search-btn" onclick="runSearch()">Search</button>
+</div>
+<div class="role-selector">
+  <div class="role-label">Viewing as</div>
+  <div class="role-pills">
+    <div class="role-pill active" onclick="selectRole(this,'AI Product Manager')">AI Product Manager</div>
+    <div class="role-pill" onclick="selectRole(this,'ML / AI Engineer')">ML / AI Engineer</div>
+    <div class="role-pill" onclick="selectRole(this,'AI Researcher')">AI Researcher</div>
+    <div class="role-pill" onclick="selectRole(this,'Business Leader')">Business Leader</div>
+    <div class="role-pill" onclick="selectRole(this,'AI Educator')">AI Educator</div>
+  </div>
+</div>
+<div class="category-tabs">
+  <button class="cat-tab active" onclick="selectCat(this,'all')">All</button>
+  <button class="cat-tab" onclick="selectCat(this,'news')">News & Announcements</button>
+  <button class="cat-tab" onclick="selectCat(this,'tutorial')">Tutorials</button>
+  <button class="cat-tab" onclick="selectCat(this,'paper')">Research Papers</button>
+  <button class="cat-tab" onclick="selectCat(this,'product')">Product Launches</button>
+  <button class="cat-tab" onclick="selectCat(this,'github')">GitHub Repos</button>
+</div>
+<div class="main">
+  <div class="feed">
+    <div class="feed-header">
+      <div class="feed-title" id="feed-title">This week in AI</div>
+      <div class="feed-meta" id="feed-meta">Filtered for AI Product Managers</div>
+    </div>
+    <div id="feed-content"></div>
+  </div>
+  <aside class="sidebar">
+    <div class="sidebar-section"><div class="sidebar-heading">Trending this week</div><div id="trending-list"></div></div>
+    <div class="sidebar-section"><div class="sidebar-heading">Browse by domain</div><div id="domain-tags"></div></div>
+  </aside>
+</div>
+<script>
+const D={'AI Product Manager':[{type:'news',title:"Google launches Agent Development Kit (ADK) — a new open-source framework for building multi-agent systems",summary:"Google's ADK provides a unified framework for composing agents using different models and tools, with built-in support for MCP servers. Significant for PMs tracking the agentic AI platform landscape.",source:"Google DeepMind Blog",date:"Mar 15, 2026",relevance:"Directly relevant — adds a major new player to the agentic framework space you're tracking.",domain:"Agentic AI & Frameworks",url:"#"},{type:'product',title:"Anthropic launches The Anthropic Institute — interdisciplinary research on AI's economic and social impact",summary:"A new initiative studying how superintelligent AI will disrupt jobs, legal systems, and the economy. Includes research on labor market exposure metrics and displacement risk by occupation.",source:"Anthropic",date:"Mar 11, 2026",relevance:"Relevant for understanding the broader narrative around enterprise AI adoption.",domain:"Enterprise AI",url:"#"},{type:'tutorial',title:"Building role-aware personalisation in AI products: a UX pattern deep-dive",summary:"Shape of AI documents the Modes and Filters patterns for building AI products that adapt to user role and context. Includes real examples from Claude, Notion AI, and GitHub Copilot.",source:"Shape of AI",date:"Mar 10, 2026",relevance:"Core reading for AI PMs — these are the design patterns that define how role-awareness is implemented in AI products.",domain:"AI Product & UX Design",url:"#"},{type:'news',title:"Nvidia announces NemoClaw — enterprise agentic AI platform for autonomous multi-step task execution",summary:"NemoClaw is Nvidia's open-source platform targeting enterprise AI agent deployment. Partners include ServiceNow, SAP, and Workday.",source:"CNBC",date:"Mar 10, 2026",relevance:"Competitive landscape signal — enterprise agent platforms are consolidating around major infrastructure players.",domain:"Agentic AI & Frameworks",url:"#"},{type:'github',title:"OpenClaw — open-source AI agent framework hits 8k stars in 48 hours",summary:"OpenClaw is an agentic AI framework backed by Chinese tech giants, designed to close the capability gap with Western platforms. Architecture is heavily MCP-compatible.",source:"GitHub Trending",date:"Mar 9, 2026",relevance:"Worth watching — MCP compatibility signals where the open-source agentic ecosystem is converging.",domain:"MCP Ecosystem",url:"#"},{type:'paper',title:"Labor market impacts of AI: a new measure and early evidence — Anthropic Research",summary:"Introduces 'observed exposure' — a new metric combining LLM capability with real-world usage data to measure AI displacement risk.",source:"Anthropic Research",date:"Mar 5, 2026",relevance:"Useful framing for product narratives around enterprise AI positioning.",domain:"Enterprise AI",url:"#"}],'ML / AI Engineer':[{type:'github',title:"Qwen 3.5 series released — 0.8B to 397B parameter range with optimised GGUF quantisation",summary:"Qwen 3.5 covers the full model size range from 0.8B to 397B. Compatible with Unsloth's dynamic 2.0 quantisation for efficient local deployment.",source:"Hugging Face",date:"Mar 14, 2026",relevance:"New competitive open-source model family worth benchmarking against your stack.",domain:"Foundation Models",url:"#"},{type:'tutorial',title:"MCP server integration for LangChain agents — a practical implementation guide",summary:"Step-by-step walkthrough of adding MCP server support to existing LangChain agents. Covers tool registration, session management, and error handling.",source:"Dev.to",date:"Mar 12, 2026",relevance:"Implementation-ready — directly applicable if you're adding MCP to existing agent pipelines.",domain:"MCP Ecosystem",url:"#"},{type:'product',title:"Ollama 0.8 ships with multi-model concurrency and 40% inference throughput improvement",summary:"Major performance update for the local model runtime. Multi-model concurrency enables serving different models simultaneously with shared GPU memory.",source:"GitHub Release",date:"Mar 8, 2026",relevance:"Significant throughput gain for local model serving workflows.",domain:"Open Source & Infra",url:"#"}],'AI Researcher':[{type:'paper',title:"Humanity's Last Exam: 2,500-question benchmark showing frontier models still miss deep expert knowledge",summary:"A global team of researchers created a brutally difficult benchmark across highly specialised domains. Even top frontier models perform poorly.",source:"arXiv",date:"Mar 13, 2026",relevance:"Key benchmark result for understanding current capability limits of frontier models.",domain:"Foundation Models",url:"#"},{type:'paper',title:"First 'AI societies' taking shape: studying social emergence in multi-agent systems",summary:"Researchers are designing controlled multi-agent environments to study emergent social behaviour. Published in Nature.",source:"Nature",date:"Mar 5, 2026",relevance:"Emerging research area — relevant for understanding how multi-agent systems behave at scale.",domain:"Agentic AI & Frameworks",url:"#"}],'Business Leader':[{type:'news',title:"Atlassian cuts 10% of workforce to fund AI investment — 1,600 employees affected",summary:"CEO cited the need to self-fund AI and enterprise sales investment and change the skill mix required for an AI-first company.",source:"Atlassian Blog",date:"Mar 11, 2026",relevance:"Strategic signal — enterprise software companies are restructuring headcount around AI investment.",domain:"Enterprise AI",url:"#"},{type:'news',title:"BCG: Nearly 3 in 4 CEOs are their company's primary AI decision maker",summary:"BCG survey finds 73% of CEOs have personally taken ownership of AI strategy. Enterprise AI is now a board-level priority.",source:"BCG",date:"Jan 2026",relevance:"Market context — positions AI strategy as a CEO-level imperative.",domain:"Enterprise AI",url:"#"}],'AI Educator':[{type:'tutorial',title:"Prompt engineering patterns for enterprise AI deployments — a practitioner's field guide",summary:"Comprehensive breakdown of prompting strategies for enterprise contexts including role-setting, chain-of-thought, and multi-turn conversation design.",source:"Latent Space",date:"Mar 7, 2026",relevance:"High-quality reference for building educational content around enterprise AI prompting.",domain:"Enterprise AI",url:"#"}]};
+const TR=["Google ADK vs LangChain — which wins for enterprise agents?","MCP is becoming the USB-C of AI tools","Qwen 3.5 local deployment guide","Why Atlassian's layoffs signal the AI-first restructuring wave","OpenClaw architecture deep-dive"];
+const DOM=["Foundation Models","Agentic AI & Frameworks","MCP Ecosystem","AI Product & UX Design","Open Source & Infra","Enterprise AI","Funding & Market","Research Papers","Regulation & Policy"];
+const TL={news:'News',tutorial:'Tutorial',paper:'Research',product:'Launch',github:'GitHub'};
+const TC={news:'tag-news',tutorial:'tag-tutorial',paper:'tag-paper',product:'tag-product',github:'tag-github'};
+let role='AI Product Manager',cat='all',searching=false;
+function renderFeed(items){const el=document.getElementById('feed-content');const f=(items||[]).filter(i=>cat==='all'||i.type===cat);if(!f.length){el.innerHTML='<div class="empty-state"><p>Nothing here yet.</p><small>Try a different category or role.</small></div>';return;}el.innerHTML=f.map(i=>`<div class="item-card" onclick="window.open('${i.url}')"><div><div class="item-tags"><span class="tag ${TC[i.type]}">${TL[i.type]}</span><span class="tag">${i.domain}</span></div><div class="item-title">${i.title}</div><div class="item-summary">${i.summary}</div><div class="item-meta"><span class="item-source">${i.source}</span><span>·</span><span>${i.date}</span></div><div class="item-relevance">↳ ${i.relevance}</div></div><div class="item-arrow">↗</div></div>`).join('');}
+function renderTrending(){document.getElementById('trending-list').innerHTML=TR.map((t,i)=>`<div class="trending-item"><div class="trending-num">${i+1}</div><div class="trending-title">${t}</div></div>`).join('');}
+function renderDomains(){document.getElementById('domain-tags').innerHTML=DOM.map(d=>`<span class="domain-tag" onclick="document.getElementById('search-input').value='${d}';runSearch()">${d}</span>`).join('');}
+function selectRole(el,r){document.querySelectorAll('.role-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');role=r;document.getElementById('nav-role-label').textContent=r;document.getElementById('feed-meta').textContent=`Filtered for ${r}s`;searching=false;document.getElementById('feed-title').textContent='This week in AI';renderFeed(D[r]||[]);}
+function selectCat(el,c){document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');cat=c;if(!searching)renderFeed(D[role]||[]);}
+async function runSearch(){const q=document.getElementById('search-input').value.trim();if(!q)return;searching=true;const btn=document.getElementById('search-btn');btn.disabled=true;btn.textContent='Searching…';document.getElementById('feed-title').textContent=`Results for "${q}"`;document.getElementById('feed-meta').textContent=`Role: ${role}`;document.getElementById('feed-content').innerHTML='<div class="loading"><div class="spinner"></div><span>Searching the AI knowledge library…</span></div>';try{const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:`You are the AI Signal knowledge library. User role: ${role}. Return 4-5 search results as JSON array only (no markdown). Each: {title,summary,type:"news"|"tutorial"|"paper"|"product"|"github",domain,source,relevance,url:"#"}`,messages:[{role:"user",content:`Search: "${q}"`}]})});const data=await res.json();const results=JSON.parse(data.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim());document.getElementById('feed-content').innerHTML=`<div class="search-status">Showing <span>${results.length} results</span> for "${q}"</div>${results.map(r=>`<div class="result-card"><div class="item-tags"><span class="tag ${TC[r.type]||''}">${TL[r.type]||r.type}</span><span class="tag">${r.domain}</span></div><div class="result-title">${r.title}</div><div class="result-body">${r.summary}</div><div class="item-relevance" style="margin-bottom:0.75rem">↳ ${r.relevance}</div><div class="item-meta"><span class="item-source">${r.source}</span></div></div>`).join('')}`;}catch(e){document.getElementById('feed-content').innerHTML='<div class="empty-state"><p>Search unavailable.</p><small>Browse the feed below or try again shortly.</small></div>';}btn.disabled=false;btn.textContent='Search';}
+document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter')runSearch();});
+renderFeed(D['AI Product Manager']);renderTrending();renderDomains();
+</script>
+</body>
+</html>
