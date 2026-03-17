@@ -7,143 +7,413 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --white:#ffffff;--black:#0a0a0a;--gray-50:#f9f9f8;--gray-100:#f0efeb;--gray-200:#e4e3de;--gray-400:#a3a29d;--gray-600:#6b6a66;--gray-800:#2c2c2a;--serif:'DM Serif Display',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif; }
-  body { font-family:var(--sans);background:var(--white);color:var(--black);font-size:15px;line-height:1.6;min-height:100vh; }
-  nav { display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2.5rem;border-bottom:0.5px solid var(--gray-200);position:sticky;top:0;background:rgba(255,255,255,0.97);backdrop-filter:blur(8px);z-index:100; }
-  .nav-logo { font-family:var(--serif);font-size:1.35rem;color:var(--black);text-decoration:none;letter-spacing:-0.02em; }
-  .nav-links { display:flex;align-items:center;gap:2rem;list-style:none; }
-  .nav-links a { font-size:0.875rem;color:var(--gray-600);text-decoration:none;transition:color 0.15s; }
-  .nav-links a:hover { color:var(--black); }
-  .nav-role-pill { display:flex;align-items:center;gap:0.5rem;background:var(--gray-100);border:0.5px solid var(--gray-200);border-radius:100px;padding:0.3rem 0.9rem;font-size:0.8rem;font-weight:500;color:var(--gray-800);cursor:pointer; }
-  .role-dot { width:6px;height:6px;border-radius:50%;background:var(--black); }
-  .hero { padding:4rem 2.5rem 2.5rem;max-width:860px; }
-  .hero-eyebrow { font-size:0.78rem;font-weight:500;letter-spacing:0.08em;color:var(--gray-400);text-transform:uppercase;margin-bottom:1rem; }
-  .hero h1 { font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);line-height:1.1;letter-spacing:-0.02em;color:var(--black);margin-bottom:1.25rem; }
-  .hero h1 em { font-style:italic;color:var(--gray-600); }
-  .hero-sub { font-size:0.95rem;color:var(--gray-600);max-width:540px;line-height:1.65; }
-  .search-bar { display:flex;align-items:center;margin:2rem 2.5rem;max-width:680px;border:1px solid var(--gray-200);border-radius:8px;overflow:hidden;transition:border-color 0.2s,box-shadow 0.2s;background:var(--white); }
-  .search-bar:focus-within { border-color:var(--gray-600);box-shadow:0 0 0 3px rgba(0,0,0,0.06); }
-  .search-icon { padding:0 0.875rem;color:var(--gray-400);font-size:1rem;flex-shrink:0; }
-  .search-input { flex:1;border:none;outline:none;font-family:var(--sans);font-size:0.9rem;color:var(--black);padding:0.8rem 0;background:transparent; }
-  .search-input::placeholder { color:var(--gray-400); }
-  .search-btn { background:var(--black);color:var(--white);border:none;padding:0.75rem 1.25rem;font-family:var(--sans);font-size:0.82rem;font-weight:500;cursor:pointer;transition:background 0.15s;flex-shrink:0; }
-  .search-btn:hover { background:var(--gray-800); }
-  .search-btn:disabled { background:var(--gray-400);cursor:not-allowed; }
-  .role-selector { padding:1.25rem 2.5rem;border-bottom:0.5px solid var(--gray-200);border-top:0.5px solid var(--gray-200);background:var(--gray-50); }
-  .role-label { font-size:0.75rem;font-weight:500;color:var(--gray-400);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem; }
-  .role-pills { display:flex;gap:0.5rem;flex-wrap:wrap; }
-  .role-pill { padding:0.4rem 1rem;border-radius:100px;border:0.5px solid var(--gray-200);background:var(--white);font-size:0.82rem;color:var(--gray-600);cursor:pointer;transition:all 0.15s; }
-  .role-pill:hover { border-color:var(--gray-400);color:var(--black); }
-  .role-pill.active { background:var(--black);color:var(--white);border-color:var(--black); }
-  .category-tabs { display:flex;padding:0 2.5rem;border-bottom:0.5px solid var(--gray-200);overflow-x:auto;scrollbar-width:none; }
-  .category-tabs::-webkit-scrollbar { display:none; }
-  .cat-tab { padding:1rem 1.25rem;font-size:0.82rem;color:var(--gray-400);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--sans); }
-  .cat-tab:hover { color:var(--black); }
-  .cat-tab.active { color:var(--black);border-bottom-color:var(--black);font-weight:500; }
-  .main { display:grid;grid-template-columns:1fr 300px;max-width:1200px;margin:0 auto; }
-  .feed { padding:2rem 2.5rem;border-right:0.5px solid var(--gray-200);min-height:600px; }
-  .feed-header { display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.75rem; }
-  .feed-title { font-family:var(--serif);font-size:1.25rem;letter-spacing:-0.01em; }
-  .feed-meta { font-size:0.78rem;color:var(--gray-400); }
-  .item-card { display:grid;grid-template-columns:1fr auto;gap:1rem;padding:1.5rem 0;border-bottom:0.5px solid var(--gray-200);cursor:pointer; }
-  .item-card:hover .item-title { text-decoration:underline;text-decoration-color:var(--gray-400); }
-  .item-tags { display:flex;gap:0.4rem;margin-bottom:0.6rem;flex-wrap:wrap; }
-  .tag { display:inline-block;padding:0.15rem 0.6rem;border-radius:100px;font-size:0.72rem;font-weight:500;background:var(--gray-100);color:var(--gray-800); }
-  .tag-news{background:#fef3c7;color:#92400e;}.tag-tutorial{background:#dbeafe;color:#1e40af;}.tag-paper{background:#ede9fe;color:#5b21b6;}.tag-product{background:#dcfce7;color:#166534;}.tag-github{background:#fce7f3;color:#9d174d;}
-  .item-title { font-family:var(--serif);font-size:1.05rem;line-height:1.35;letter-spacing:-0.01em;color:var(--black);margin-bottom:0.5rem; }
-  .item-summary { font-size:0.85rem;color:var(--gray-600);line-height:1.6;margin-bottom:0.65rem; }
-  .item-meta { display:flex;align-items:center;gap:0.75rem;font-size:0.75rem;color:var(--gray-400); }
-  .item-source { font-weight:500;color:var(--gray-600); }
-  .item-relevance { font-size:0.72rem;color:var(--gray-400);font-style:italic; }
-  .item-arrow { font-size:1rem;color:var(--gray-400);align-self:flex-start;margin-top:0.25rem;transition:transform 0.15s,color 0.15s; }
-  .item-card:hover .item-arrow { transform:translate(2px,-2px);color:var(--black); }
-  .sidebar { padding:2rem 1.75rem; }
-  .sidebar-section { margin-bottom:2.5rem; }
-  .sidebar-heading { font-size:0.72rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:0.5px solid var(--gray-200); }
-  .trending-item { display:flex;gap:0.75rem;align-items:flex-start;padding:0.65rem 0;border-bottom:0.5px solid var(--gray-100);cursor:pointer; }
-  .trending-num { font-family:var(--serif);font-size:1.1rem;color:var(--gray-200);font-style:italic;line-height:1;flex-shrink:0;margin-top:0.1rem; }
-  .trending-title { font-size:0.83rem;color:var(--gray-800);line-height:1.4; }
-  .trending-item:hover .trending-title { color:var(--black); }
-  .domain-tag { display:inline-block;padding:0.2rem 0.65rem;border-radius:4px;font-size:0.72rem;background:var(--gray-100);color:var(--gray-600);margin:0.2rem 0.2rem 0 0;cursor:pointer;transition:background 0.15s,color 0.15s; }
-  .domain-tag:hover { background:var(--black);color:var(--white); }
-  .loading { display:flex;align-items:center;gap:0.75rem;padding:2rem 0;color:var(--gray-400);font-size:0.875rem; }
-  .spinner { width:16px;height:16px;border:1.5px solid var(--gray-200);border-top-color:var(--black);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0; }
-  @keyframes spin { to { transform:rotate(360deg); } }
-  .result-card { padding:1.5rem;border:0.5px solid var(--gray-200);border-radius:10px;margin-bottom:1rem;background:var(--white);transition:border-color 0.15s,box-shadow 0.15s;cursor:pointer; }
-  .result-card:hover { border-color:var(--gray-400);box-shadow:0 2px 12px rgba(0,0,0,0.06); }
-  .result-title { font-family:var(--serif);font-size:1.05rem;letter-spacing:-0.01em;margin-bottom:0.5rem;color:var(--black); }
-  .result-body { font-size:0.875rem;color:var(--gray-600);line-height:1.65;margin-bottom:0.75rem; }
-  .search-status { font-size:0.8rem;color:var(--gray-400);margin-bottom:1.5rem; }
-  .search-status span { font-weight:500;color:var(--black); }
-  .empty-state { padding:3rem 0;text-align:center;color:var(--gray-400); }
-  .empty-state p { font-family:var(--serif);font-size:1.1rem;font-style:italic;margin-bottom:0.5rem; }
-  @media(max-width:768px){.main{grid-template-columns:1fr;}.sidebar{display:none;}nav{padding:1rem 1.25rem;}.hero,.search-bar{padding-left:1.25rem;padding-right:1.25rem;}.search-bar{margin-left:1.25rem;margin-right:1.25rem;}.category-tabs{padding:0 1.25rem;}.feed{padding:1.5rem 1.25rem;}}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--w:#fff;--b:#0a0a0a;--g50:#f9f9f8;--g100:#f0efeb;--g200:#e4e3de;--g400:#a3a29d;--g600:#6b6a66;--g800:#2c2c2a;--serif:'DM Serif Display',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;}
+  body{font-family:var(--sans);background:var(--w);color:var(--b);font-size:15px;line-height:1.6;min-height:100vh;}
+
+  nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2.5rem;border-bottom:0.5px solid var(--g200);position:sticky;top:0;background:rgba(255,255,255,0.97);backdrop-filter:blur(8px);z-index:100;}
+  .nav-logo{font-family:var(--serif);font-size:1.35rem;color:var(--b);text-decoration:none;letter-spacing:-0.02em;}
+  .nav-links{display:flex;align-items:center;gap:2rem;list-style:none;}
+  .nav-links a{font-size:0.875rem;color:var(--g600);text-decoration:none;transition:color 0.15s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--b);}
+  .nav-links a.active{font-weight:500;}
+  .nav-context{display:flex;align-items:center;gap:0.5rem;background:var(--g100);border:0.5px solid var(--g200);border-radius:100px;padding:0.3rem 0.9rem;font-size:0.8rem;font-weight:500;color:var(--g800);cursor:pointer;}
+  .ctx-dot{width:6px;height:6px;border-radius:50%;background:var(--b);}
+
+  /* ONBOARDING MODAL */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem;}
+  .modal{background:var(--w);border-radius:16px;padding:2.5rem;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;}
+  .modal-step{display:none;}
+  .modal-step.active{display:block;}
+  .modal-eyebrow{font-size:0.72rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--g400);margin-bottom:0.5rem;}
+  .modal h2{font-family:var(--serif);font-size:1.75rem;letter-spacing:-0.02em;margin-bottom:0.5rem;}
+  .modal p{font-size:0.9rem;color:var(--g600);margin-bottom:1.5rem;line-height:1.6;}
+  .modal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.5rem;margin-bottom:1.5rem;}
+  .modal-option{padding:0.75rem 1rem;border:0.5px solid var(--g200);border-radius:8px;font-size:0.83rem;color:var(--g600);cursor:pointer;transition:all 0.15s;background:var(--w);font-family:var(--sans);text-align:left;}
+  .modal-option:hover{border-color:var(--g400);color:var(--b);}
+  .modal-option.selected{background:var(--b);color:var(--w);border-color:var(--b);}
+  .modal-option .opt-icon{font-size:1.1rem;margin-bottom:0.3rem;display:block;}
+  .modal-option .opt-label{font-weight:500;font-size:0.82rem;display:block;}
+  .modal-option .opt-sub{font-size:0.72rem;color:var(--g400);display:block;margin-top:0.15rem;}
+  .modal-option.selected .opt-sub{color:rgba(255,255,255,0.6);}
+  .modal-btn{width:100%;padding:0.875rem;background:var(--b);color:var(--w);border:none;border-radius:8px;font-family:var(--sans);font-size:0.9rem;font-weight:500;cursor:pointer;transition:background 0.15s;margin-top:0.5rem;}
+  .modal-btn:hover{background:var(--g800);}
+  .modal-btn:disabled{background:var(--g400);cursor:not-allowed;}
+  .modal-progress{display:flex;gap:0.4rem;margin-bottom:1.5rem;}
+  .progress-dot{height:3px;flex:1;border-radius:100px;background:var(--g200);transition:background 0.3s;}
+  .progress-dot.done{background:var(--b);}
+
+  .hero{padding:3.5rem 2.5rem 2rem;max-width:860px;}
+  .hero-eyebrow{font-size:0.78rem;font-weight:500;letter-spacing:0.08em;color:var(--g400);text-transform:uppercase;margin-bottom:1rem;}
+  .hero h1{font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);line-height:1.1;letter-spacing:-0.02em;margin-bottom:1.25rem;}
+  .hero h1 em{font-style:italic;color:var(--g600);}
+  .hero-sub{font-size:0.95rem;color:var(--g600);max-width:540px;line-height:1.65;}
+
+  .context-bar{display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;border-bottom:0.5px solid var(--g200);border-top:0.5px solid var(--g200);background:var(--g50);}
+  .context-left{display:flex;align-items:center;gap:1rem;}
+  .context-pill{display:flex;align-items:center;gap:0.4rem;padding:0.3rem 0.8rem;border-radius:100px;background:var(--b);color:var(--w);font-size:0.78rem;font-weight:500;}
+  .context-pill-industry{background:var(--g200);color:var(--g800);}
+  .context-sep{color:var(--g400);font-size:0.8rem;}
+  .change-btn{font-size:0.78rem;color:var(--g400);background:none;border:none;cursor:pointer;font-family:var(--sans);text-decoration:underline;}
+  .change-btn:hover{color:var(--b);}
+
+  .search-bar{display:flex;align-items:center;margin:1.5rem 2.5rem;max-width:680px;border:1px solid var(--g200);border-radius:8px;overflow:hidden;transition:border-color 0.2s,box-shadow 0.2s;background:var(--w);}
+  .search-bar:focus-within{border-color:var(--g600);box-shadow:0 0 0 3px rgba(0,0,0,0.06);}
+  .search-icon{padding:0 0.875rem;color:var(--g400);font-size:1rem;flex-shrink:0;}
+  .search-input{flex:1;border:none;outline:none;font-family:var(--sans);font-size:0.9rem;color:var(--b);padding:0.8rem 0;background:transparent;}
+  .search-input::placeholder{color:var(--g400);}
+  .search-btn{background:var(--b);color:var(--w);border:none;padding:0.75rem 1.25rem;font-family:var(--sans);font-size:0.82rem;font-weight:500;cursor:pointer;transition:background 0.15s;flex-shrink:0;}
+  .search-btn:hover{background:var(--g800);}
+  .search-btn:disabled{background:var(--g400);cursor:not-allowed;}
+
+  .cat-tabs{display:flex;padding:0 2.5rem;border-bottom:0.5px solid var(--g200);overflow-x:auto;scrollbar-width:none;}
+  .cat-tabs::-webkit-scrollbar{display:none;}
+  .cat-tab{padding:1rem 1.25rem;font-size:0.82rem;color:var(--g400);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--sans);}
+  .cat-tab:hover{color:var(--b);}
+  .cat-tab.active{color:var(--b);border-bottom-color:var(--b);font-weight:500;}
+
+  .main{display:grid;grid-template-columns:1fr 300px;max-width:1200px;margin:0 auto;}
+  .feed{padding:2rem 2.5rem;border-right:0.5px solid var(--g200);min-height:600px;}
+  .feed-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.75rem;}
+  .feed-title{font-family:var(--serif);font-size:1.25rem;letter-spacing:-0.01em;}
+  .feed-meta{font-size:0.78rem;color:var(--g400);}
+
+  .feed-section-label{font-size:0.7rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--g400);padding:0.75rem 0 0.5rem;border-top:0.5px solid var(--g200);margin-top:0.5rem;}
+  .feed-section-label:first-child{border-top:none;margin-top:0;}
+
+  .item-card{display:grid;grid-template-columns:1fr auto;gap:1rem;padding:1.25rem 0;border-bottom:0.5px solid var(--g200);cursor:pointer;}
+  .item-card:hover .item-title{text-decoration:underline;text-decoration-color:var(--g400);}
+  .item-tags{display:flex;gap:0.4rem;margin-bottom:0.5rem;flex-wrap:wrap;}
+  .tag{display:inline-block;padding:0.15rem 0.6rem;border-radius:100px;font-size:0.72rem;font-weight:500;background:var(--g100);color:var(--g800);}
+  .tag-news{background:#fef3c7;color:#92400e;}.tag-tutorial{background:#dbeafe;color:#1e40af;}.tag-paper{background:#ede9fe;color:#5b21b6;}.tag-product{background:#dcfce7;color:#166534;}.tag-github{background:#fce7f3;color:#9d174d;}.tag-practitioner{background:#fff7ed;color:#9a3412;}
+  .tag-industry{background:#f0fdf4;color:#166534;}
+  .item-title{font-family:var(--serif);font-size:1.05rem;line-height:1.35;letter-spacing:-0.01em;color:var(--b);margin-bottom:0.4rem;}
+  .item-summary{font-size:0.83rem;color:var(--g600);line-height:1.6;margin-bottom:0.5rem;}
+  .item-meta{display:flex;align-items:center;gap:0.75rem;font-size:0.75rem;color:var(--g400);}
+  .item-source{font-weight:500;color:var(--g600);}
+  .item-relevance{font-size:0.72rem;color:var(--g400);font-style:italic;margin-top:0.3rem;}
+  .item-arrow{font-size:1rem;color:var(--g400);align-self:flex-start;margin-top:0.25rem;transition:transform 0.15s,color 0.15s;}
+  .item-card:hover .item-arrow{transform:translate(2px,-2px);color:var(--b);}
+
+  .sidebar{padding:2rem 1.75rem;}
+  .sidebar-section{margin-bottom:2.5rem;}
+  .sidebar-heading{font-size:0.72rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--g400);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:0.5px solid var(--g200);}
+  .trending-item{display:flex;gap:0.75rem;align-items:flex-start;padding:0.65rem 0;border-bottom:0.5px solid var(--g100);cursor:pointer;}
+  .trending-num{font-family:var(--serif);font-size:1.1rem;color:var(--g200);font-style:italic;line-height:1;flex-shrink:0;margin-top:0.1rem;}
+  .trending-title{font-size:0.83rem;color:var(--g800);line-height:1.4;}
+  .trending-item:hover .trending-title{color:var(--b);}
+  .domain-tag{display:inline-block;padding:0.2rem 0.65rem;border-radius:4px;font-size:0.72rem;background:var(--g100);color:var(--g600);margin:0.2rem 0.2rem 0 0;cursor:pointer;transition:background 0.15s,color 0.15s;}
+  .domain-tag:hover{background:var(--b);color:var(--w);}
+
+  .loading{display:flex;align-items:center;gap:0.75rem;padding:2rem 0;color:var(--g400);font-size:0.875rem;}
+  .spinner{width:16px;height:16px;border:1.5px solid var(--g200);border-top-color:var(--b);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .result-card{padding:1.5rem;border:0.5px solid var(--g200);border-radius:10px;margin-bottom:1rem;background:var(--w);transition:border-color 0.15s,box-shadow 0.15s;cursor:pointer;}
+  .result-card:hover{border-color:var(--g400);box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+  .result-title{font-family:var(--serif);font-size:1.05rem;letter-spacing:-0.01em;margin-bottom:0.5rem;color:var(--b);}
+  .result-body{font-size:0.875rem;color:var(--g600);line-height:1.65;margin-bottom:0.75rem;}
+  .search-status{font-size:0.8rem;color:var(--g400);margin-bottom:1.5rem;}
+  .search-status span{font-weight:500;color:var(--b);}
+  .empty-state{padding:3rem 0;text-align:center;color:var(--g400);}
+  .empty-state p{font-family:var(--serif);font-size:1.1rem;font-style:italic;margin-bottom:0.5rem;}
+
+  @media(max-width:768px){.main{grid-template-columns:1fr;}.sidebar{display:none;}nav{padding:1rem 1.25rem;}.hero,.search-bar{padding-left:1.25rem;padding-right:1.25rem;}.search-bar{margin-left:1.25rem;margin-right:1.25rem;}.cat-tabs{padding:0 1.25rem;}.feed{padding:1.5rem 1.25rem;}.context-bar{padding:1rem 1.25rem;flex-direction:column;align-items:flex-start;gap:0.75rem;}}
 </style>
 </head>
 <body>
-<nav>
-  <a class="nav-logo" href="#">AI Signal</a>
-  <ul class="nav-links"><li><a href="index.html">Browse</a></li><li><a href="index.html">Search</a></li><li><a href="foundations.html">Foundations</a></li>
-    <li><a href="#">Digest</a></li></ul>
-  <div class="nav-role-pill"><div class="role-dot"></div><span id="nav-role-label">AI Product Manager</span></div>
-</nav>
-<div class="hero">
-  <div class="hero-eyebrow">The AI knowledge library</div>
-  <h1>Everything in AI.<br><em>Filtered for your role.</em></h1>
-  <p class="hero-sub">News, tutorials, research papers, product launches, and GitHub repositories — automatically classified and surfaced for how you work.</p>
-</div>
-<div class="search-bar">
-  <div class="search-icon">⌕</div>
-  <input class="search-input" id="search-input" type="text" placeholder="Search the library — e.g. 'best agentic frameworks for enterprise'" />
-  <button class="search-btn" id="search-btn" onclick="runSearch()">Search</button>
-</div>
-<div class="role-selector">
-  <div class="role-label">Viewing as</div>
-  <div class="role-pills">
-    <div class="role-pill active" onclick="selectRole(this,'AI Product Manager')">AI Product Manager</div>
-    <div class="role-pill" onclick="selectRole(this,'ML / AI Engineer')">ML / AI Engineer</div>
-    <div class="role-pill" onclick="selectRole(this,'AI Researcher')">AI Researcher</div>
-    <div class="role-pill" onclick="selectRole(this,'Business Leader')">Business Leader</div>
-    <div class="role-pill" onclick="selectRole(this,'AI Educator')">AI Educator</div>
+
+<!-- ONBOARDING MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <!-- Step 1: Role -->
+    <div class="modal-step active" id="step1">
+      <div class="modal-progress"><div class="progress-dot done"></div><div class="progress-dot"></div></div>
+      <div class="modal-eyebrow">Step 1 of 2</div>
+      <h2>What's your role?</h2>
+      <p>Your feed is filtered by what matters for how you work. Pick the closest match.</p>
+      <div class="modal-grid" id="role-grid"></div>
+      <button class="modal-btn" id="step1-btn" disabled onclick="goStep2()">Continue →</button>
+    </div>
+    <!-- Step 2: Industry -->
+    <div class="modal-step" id="step2">
+      <div class="modal-progress"><div class="progress-dot done"></div><div class="progress-dot done"></div></div>
+      <div class="modal-eyebrow">Step 2 of 2</div>
+      <h2>What's your industry?</h2>
+      <p>Same role, different industry = completely different feed. Pick yours.</p>
+      <div class="modal-grid" id="industry-grid"></div>
+      <button class="modal-btn" id="step2-btn" disabled onclick="finishOnboarding()">Show my feed →</button>
+    </div>
   </div>
 </div>
-<div class="category-tabs">
-  <button class="cat-tab active" onclick="selectCat(this,'all')">All</button>
-  <button class="cat-tab" onclick="selectCat(this,'news')">News & Announcements</button>
-  <button class="cat-tab" onclick="selectCat(this,'tutorial')">Tutorials</button>
-  <button class="cat-tab" onclick="selectCat(this,'paper')">Research Papers</button>
-  <button class="cat-tab" onclick="selectCat(this,'product')">Product Launches</button>
-  <button class="cat-tab" onclick="selectCat(this,'github')">GitHub Repos</button>
+
+<nav>
+  <a class="nav-logo" href="#">AI Signal</a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Browse</a></li>
+    <li><a href="#">Search</a></li>
+    <li><a href="foundations.html">Foundations</a></li>
+    <li><a href="#">Digest</a></li>
+  </ul>
+  <div class="nav-context" onclick="showModal()">
+    <div class="ctx-dot"></div>
+    <span id="nav-ctx">Set your role</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">The AI knowledge library</div>
+  <h1>Everything in AI.<br><em>Filtered for your role & industry.</em></h1>
+  <p class="hero-sub">News, tutorials, research papers, product launches, GitHub repos, and practitioner articles — classified and surfaced for exactly who you are and where you work.</p>
 </div>
+
+<div class="context-bar" id="context-bar" style="display:none">
+  <div class="context-left">
+    <div class="context-pill" id="ctx-role-pill">AI Product Manager</div>
+    <div class="context-sep">×</div>
+    <div class="context-pill context-pill-industry" id="ctx-industry-pill">Healthcare</div>
+  </div>
+  <button class="change-btn" onclick="showModal()">Change my profile</button>
+</div>
+
+<div class="search-bar" style="margin-top:1.5rem">
+  <div class="search-icon">⌕</div>
+  <input class="search-input" id="search-input" type="text" placeholder="Search the library…" />
+  <button class="search-btn" id="search-btn" onclick="runSearch()">Search</button>
+</div>
+
+<div class="cat-tabs">
+  <button class="cat-tab active" onclick="selectCat(this,'all')">All</button>
+  <button class="cat-tab" onclick="selectCat(this,'news')">News</button>
+  <button class="cat-tab" onclick="selectCat(this,'tutorial')">Tutorials</button>
+  <button class="cat-tab" onclick="selectCat(this,'paper')">Research</button>
+  <button class="cat-tab" onclick="selectCat(this,'product')">Launches</button>
+  <button class="cat-tab" onclick="selectCat(this,'github')">GitHub</button>
+  <button class="cat-tab" onclick="selectCat(this,'practitioner')">Practitioner</button>
+</div>
+
 <div class="main">
   <div class="feed">
     <div class="feed-header">
-      <div class="feed-title" id="feed-title">This week in AI</div>
-      <div class="feed-meta" id="feed-meta">Filtered for AI Product Managers</div>
+      <div class="feed-title" id="feed-title">Set your profile to personalise your feed</div>
+      <div class="feed-meta" id="feed-meta"></div>
     </div>
-    <div id="feed-content"></div>
+    <div id="feed-content">
+      <div class="empty-state"><p>Complete onboarding to see your personalised feed.</p><small>Click "Set your role" in the top right to get started.</small></div>
+    </div>
   </div>
   <aside class="sidebar">
     <div class="sidebar-section"><div class="sidebar-heading">Trending this week</div><div id="trending-list"></div></div>
     <div class="sidebar-section"><div class="sidebar-heading">Browse by domain</div><div id="domain-tags"></div></div>
   </aside>
 </div>
+
 <script>
-const D={'AI Product Manager':[{type:'news',title:"Google launches Agent Development Kit (ADK) — a new open-source framework for building multi-agent systems",summary:"Google's ADK provides a unified framework for composing agents using different models and tools, with built-in support for MCP servers. Significant for PMs tracking the agentic AI platform landscape.",source:"Google DeepMind Blog",date:"Mar 15, 2026",relevance:"Directly relevant — adds a major new player to the agentic framework space you're tracking.",domain:"Agentic AI & Frameworks",url:"#"},{type:'product',title:"Anthropic launches The Anthropic Institute — interdisciplinary research on AI's economic and social impact",summary:"A new initiative studying how superintelligent AI will disrupt jobs, legal systems, and the economy. Includes research on labor market exposure metrics and displacement risk by occupation.",source:"Anthropic",date:"Mar 11, 2026",relevance:"Relevant for understanding the broader narrative around enterprise AI adoption.",domain:"Enterprise AI",url:"#"},{type:'tutorial',title:"Building role-aware personalisation in AI products: a UX pattern deep-dive",summary:"Shape of AI documents the Modes and Filters patterns for building AI products that adapt to user role and context. Includes real examples from Claude, Notion AI, and GitHub Copilot.",source:"Shape of AI",date:"Mar 10, 2026",relevance:"Core reading for AI PMs — these are the design patterns that define how role-awareness is implemented in AI products.",domain:"AI Product & UX Design",url:"#"},{type:'news',title:"Nvidia announces NemoClaw — enterprise agentic AI platform for autonomous multi-step task execution",summary:"NemoClaw is Nvidia's open-source platform targeting enterprise AI agent deployment. Partners include ServiceNow, SAP, and Workday.",source:"CNBC",date:"Mar 10, 2026",relevance:"Competitive landscape signal — enterprise agent platforms are consolidating around major infrastructure players.",domain:"Agentic AI & Frameworks",url:"#"},{type:'github',title:"OpenClaw — open-source AI agent framework hits 8k stars in 48 hours",summary:"OpenClaw is an agentic AI framework backed by Chinese tech giants, designed to close the capability gap with Western platforms. Architecture is heavily MCP-compatible.",source:"GitHub Trending",date:"Mar 9, 2026",relevance:"Worth watching — MCP compatibility signals where the open-source agentic ecosystem is converging.",domain:"MCP Ecosystem",url:"#"},{type:'paper',title:"Labor market impacts of AI: a new measure and early evidence — Anthropic Research",summary:"Introduces 'observed exposure' — a new metric combining LLM capability with real-world usage data to measure AI displacement risk.",source:"Anthropic Research",date:"Mar 5, 2026",relevance:"Useful framing for product narratives around enterprise AI positioning.",domain:"Enterprise AI",url:"#"}],'ML / AI Engineer':[{type:'github',title:"Qwen 3.5 series released — 0.8B to 397B parameter range with optimised GGUF quantisation",summary:"Qwen 3.5 covers the full model size range from 0.8B to 397B. Compatible with Unsloth's dynamic 2.0 quantisation for efficient local deployment.",source:"Hugging Face",date:"Mar 14, 2026",relevance:"New competitive open-source model family worth benchmarking against your stack.",domain:"Foundation Models",url:"#"},{type:'tutorial',title:"MCP server integration for LangChain agents — a practical implementation guide",summary:"Step-by-step walkthrough of adding MCP server support to existing LangChain agents. Covers tool registration, session management, and error handling.",source:"Dev.to",date:"Mar 12, 2026",relevance:"Implementation-ready — directly applicable if you're adding MCP to existing agent pipelines.",domain:"MCP Ecosystem",url:"#"},{type:'product',title:"Ollama 0.8 ships with multi-model concurrency and 40% inference throughput improvement",summary:"Major performance update for the local model runtime. Multi-model concurrency enables serving different models simultaneously with shared GPU memory.",source:"GitHub Release",date:"Mar 8, 2026",relevance:"Significant throughput gain for local model serving workflows.",domain:"Open Source & Infra",url:"#"}],'AI Researcher':[{type:'paper',title:"Humanity's Last Exam: 2,500-question benchmark showing frontier models still miss deep expert knowledge",summary:"A global team of researchers created a brutally difficult benchmark across highly specialised domains. Even top frontier models perform poorly.",source:"arXiv",date:"Mar 13, 2026",relevance:"Key benchmark result for understanding current capability limits of frontier models.",domain:"Foundation Models",url:"#"},{type:'paper',title:"First 'AI societies' taking shape: studying social emergence in multi-agent systems",summary:"Researchers are designing controlled multi-agent environments to study emergent social behaviour. Published in Nature.",source:"Nature",date:"Mar 5, 2026",relevance:"Emerging research area — relevant for understanding how multi-agent systems behave at scale.",domain:"Agentic AI & Frameworks",url:"#"}],'Business Leader':[{type:'news',title:"Atlassian cuts 10% of workforce to fund AI investment — 1,600 employees affected",summary:"CEO cited the need to self-fund AI and enterprise sales investment and change the skill mix required for an AI-first company.",source:"Atlassian Blog",date:"Mar 11, 2026",relevance:"Strategic signal — enterprise software companies are restructuring headcount around AI investment.",domain:"Enterprise AI",url:"#"},{type:'news',title:"BCG: Nearly 3 in 4 CEOs are their company's primary AI decision maker",summary:"BCG survey finds 73% of CEOs have personally taken ownership of AI strategy. Enterprise AI is now a board-level priority.",source:"BCG",date:"Jan 2026",relevance:"Market context — positions AI strategy as a CEO-level imperative.",domain:"Enterprise AI",url:"#"}],'AI Educator':[{type:'tutorial',title:"Prompt engineering patterns for enterprise AI deployments — a practitioner's field guide",summary:"Comprehensive breakdown of prompting strategies for enterprise contexts including role-setting, chain-of-thought, and multi-turn conversation design.",source:"Latent Space",date:"Mar 7, 2026",relevance:"High-quality reference for building educational content around enterprise AI prompting.",domain:"Enterprise AI",url:"#"}]};
-const TR=["Google ADK vs LangChain — which wins for enterprise agents?","MCP is becoming the USB-C of AI tools","Qwen 3.5 local deployment guide","Why Atlassian's layoffs signal the AI-first restructuring wave","OpenClaw architecture deep-dive"];
-const DOM=["Foundation Models","Agentic AI & Frameworks","MCP Ecosystem","AI Product & UX Design","Open Source & Infra","Enterprise AI","Funding & Market","Research Papers","Regulation & Policy"];
-const TL={news:'News',tutorial:'Tutorial',paper:'Research',product:'Launch',github:'GitHub'};
-const TC={news:'tag-news',tutorial:'tag-tutorial',paper:'tag-paper',product:'tag-product',github:'tag-github'};
-let role='AI Product Manager',cat='all',searching=false;
-function renderFeed(items){const el=document.getElementById('feed-content');const f=(items||[]).filter(i=>cat==='all'||i.type===cat);if(!f.length){el.innerHTML='<div class="empty-state"><p>Nothing here yet.</p><small>Try a different category or role.</small></div>';return;}el.innerHTML=f.map(i=>`<div class="item-card" onclick="window.open('${i.url}')"><div><div class="item-tags"><span class="tag ${TC[i.type]}">${TL[i.type]}</span><span class="tag">${i.domain}</span></div><div class="item-title">${i.title}</div><div class="item-summary">${i.summary}</div><div class="item-meta"><span class="item-source">${i.source}</span><span>·</span><span>${i.date}</span></div><div class="item-relevance">↳ ${i.relevance}</div></div><div class="item-arrow">↗</div></div>`).join('');}
+const ROLES = [
+  { id:'pm', label:'AI Product Manager', sub:'Roadmap, competitive landscape, capabilities', icon:'📦' },
+  { id:'eng', label:'ML / AI Engineer', sub:'Models, frameworks, open-source, infra', icon:'⚙️' },
+  { id:'research', label:'AI Researcher', sub:'Papers, benchmarks, lab publications', icon:'🔬' },
+  { id:'designer', label:'AI Designer / UX', sub:'UX patterns, human-AI interaction', icon:'🎨' },
+  { id:'consultant', label:'Consultant', sub:'Use cases, ROI frameworks, client narratives', icon:'💼' },
+  { id:'strategist', label:'Strategist', sub:'Market moves, funding, new business models', icon:'♟️' },
+  { id:'ta', label:'Talent Acquisition', sub:'AI hiring trends, emerging roles, skills', icon:'🎯' },
+  { id:'ld', label:'L&D / Training Lead', sub:'AI upskilling, course design, certifications', icon:'📚' },
+  { id:'enablement', label:'Org AI Enablement', sub:'Adoption, change management, playbooks', icon:'🚀' },
+  { id:'ops', label:'BizOps / Ops Manager', sub:'Process automation, workflow AI, ROI', icon:'⚡' },
+];
+
+const INDUSTRIES = [
+  { id:'healthcare', label:'Healthcare', icon:'🏥' },
+  { id:'finance', label:'Finance & Banking', icon:'🏦' },
+  { id:'legal', label:'Legal', icon:'⚖️' },
+  { id:'hr', label:'HR & People Ops', icon:'👥' },
+  { id:'education', label:'Education', icon:'🎓' },
+  { id:'retail', label:'Retail & E-commerce', icon:'🛍️' },
+  { id:'manufacturing', label:'Manufacturing', icon:'🏭' },
+  { id:'government', label:'Government', icon:'🏛️' },
+  { id:'general', label:'General / Cross-industry', icon:'🌐' },
+];
+
+const TL={news:'News',tutorial:'Tutorial',paper:'Research',product:'Launch',github:'GitHub',practitioner:'Practitioner'};
+const TC={news:'tag-news',tutorial:'tag-tutorial',paper:'tag-paper',product:'tag-product',github:'tag-github',practitioner:'tag-practitioner'};
+const TR=["Google ADK vs LangChain — which wins for enterprise agents?","MCP is becoming the USB-C of AI tools","AI in Healthcare: FDA's new guidance framework explained","OpenClaw architecture deep-dive","How Legal AI is changing contract review workflows"];
+const DOMAINS=["Foundation Models","Agentic AI & Frameworks","MCP Ecosystem","AI Product & UX Design","Open Source & Infra","Enterprise AI","Funding & Market","Research Papers","Regulation & Policy","Industry AI"];
+
+const FEED_DATA = {
+  pm: {
+    healthcare: [
+      {type:'news',title:"FDA releases updated AI/ML guidance for medical device software — what PMs need to know",summary:"The FDA's new framework classifies AI-enabled medical devices by risk level and introduces 'predetermined change control plans' allowing continuous learning models to update without full re-approval.",source:"FDA / MedCity News",date:"Mar 14, 2026",relevance:"Direct regulatory constraint on any AI product touching clinical workflows — shapes your roadmap and compliance requirements.",domain:"Regulation & Policy",industry:true},
+      {type:'product',title:"Microsoft DAX Copilot expands to 500 health systems — ambient AI documentation now mainstream",summary:"Dragon Ambient eXperience Copilot, Microsoft's ambient AI for clinical documentation, crosses the 500 health system mark. Signals that AI scribe technology is no longer early-adopter territory.",source:"Microsoft Health Blog",date:"Mar 12, 2026",relevance:"Competitive signal — if you're building in clinical AI, ambient documentation is table stakes. Your differentiation needs to be elsewhere.",domain:"Enterprise AI",industry:true},
+      {type:'news',title:"Google launches Agent Development Kit (ADK) — multi-agent framework with MCP support",summary:"Google's open-source ADK lets developers compose agents across different models and tools. Built-in MCP server compatibility positions it as infrastructure for enterprise agentic workflows.",source:"Google DeepMind Blog",date:"Mar 15, 2026",relevance:"Platform-level decision — ADK is now a serious alternative to LangChain for enterprise agent development. Worth understanding before your next roadmap review.",domain:"Agentic AI & Frameworks",industry:false},
+      {type:'practitioner',title:"Building a production-ready Claude Code skill — what actually works",summary:"A practitioner walkthrough of implementing Claude Code skills in production. Covers prompt structure, error handling, testing methodology, and lessons from real deployments. From Towards Data Science.",source:"Towards Data Science",date:"Mar 11, 2026",relevance:"Directly applicable if you're building Claude-powered features — real implementation knowledge vs. theoretical docs.",domain:"AI Product & UX Design",industry:false},
+    ],
+    finance: [
+      {type:'news',title:"SEC releases AI governance guidance for financial institutions — compliance timeline announced",summary:"The SEC's new guidance requires financial firms to document AI decision-making processes for investment recommendations and disclose AI use in client-facing products. 18-month compliance window.",source:"SEC / Financial Times",date:"Mar 13, 2026",relevance:"Regulatory constraint shaping every AI product roadmap in financial services — your compliance and legal teams need to see this.",domain:"Regulation & Policy",industry:true},
+      {type:'product',title:"Bloomberg launches BloombergGPT v2 — financial LLM now available via API to enterprise clients",summary:"BloombergGPT v2 trained on 50+ years of financial data offers significantly improved earnings call analysis, regulatory filing parsing, and market sentiment analysis. Available to Terminal subscribers.",source:"Bloomberg",date:"Mar 10, 2026",relevance:"Competitive intelligence — a domain-specific financial LLM from the market data leader is now an option for fintech PM roadmaps.",domain:"Foundation Models",industry:true},
+      {type:'news',title:"Nvidia announces NemoClaw — enterprise agentic AI platform for autonomous task execution",summary:"NemoClaw targets enterprise AI agent deployment with partners including SAP and Workday. Positions Nvidia as an end-to-end enterprise AI stack player beyond hardware.",source:"CNBC",date:"Mar 10, 2026",relevance:"Platform-level signal — enterprise agent infrastructure is consolidating. Relevant for any PM building automated financial workflows.",domain:"Agentic AI & Frameworks",industry:false},
+    ],
+    legal: [
+      {type:'news',title:"American Bar Association issues formal AI ethics guidelines — hallucination liability clarified",summary:"The ABA's new guidance addresses attorney responsibility when using AI for legal research, establishing that lawyers remain fully liable for AI-generated content. Includes specific guidance on disclosure to clients.",source:"ABA Journal",date:"Mar 12, 2026",relevance:"Defines the compliance boundary for any AI product in the legal market — shapes what your product can and cannot automate.",domain:"Regulation & Policy",industry:true},
+      {type:'product',title:"Harvey AI raises $300M Series D — legal AI platform now valued at $3B",summary:"Harvey, the legal AI platform used by top-10 law firms, closes a major funding round. Expanding into contract lifecycle management and regulatory compliance automation.",source:"Bloomberg Law",date:"Mar 9, 2026",relevance:"Competitive funding signal — the legal AI market is consolidating fast. Harvey's expansion roadmap tells you where the category is heading.",domain:"Funding & Market",industry:true},
+    ],
+    general: [
+      {type:'news',title:"Google launches Agent Development Kit (ADK) — open-source multi-agent framework",summary:"Google's ADK provides a unified framework for composing agents using different models and tools, with built-in MCP server support.",source:"Google DeepMind Blog",date:"Mar 15, 2026",relevance:"Major new player in the agentic framework space — directly relevant to your product roadmap.",domain:"Agentic AI & Frameworks",industry:false},
+      {type:'practitioner',title:"Building a production-ready Claude Code skill — what actually works",summary:"Real-world implementation guide for Claude Code skills in production. Covers prompt engineering, error handling, and testing.",source:"Towards Data Science",date:"Mar 11, 2026",relevance:"Practical implementation knowledge for PMs overseeing Claude-powered feature development.",domain:"AI Product & UX Design",industry:false},
+      {type:'tutorial',title:"Role-aware personalisation in AI products — UX patterns deep-dive",summary:"Shape of AI documents the Modes and Filters patterns for building AI products that adapt to user role and context.",source:"Shape of AI",date:"Mar 10, 2026",relevance:"Core design patterns for AI PMs — real examples from Claude, Notion AI, GitHub Copilot.",domain:"AI Product & UX Design",industry:false},
+    ]
+  },
+  eng: {
+    healthcare: [
+      {type:'github',title:"MedSAM2 — Meta's Segment Anything Model fine-tuned for medical image segmentation hits 12k stars",summary:"Open-source medical imaging model achieving state-of-the-art results on CT, MRI, and pathology segmentation. MIT licensed, production-ready with ONNX export.",source:"GitHub Trending",date:"Mar 13, 2026",relevance:"Production-ready medical imaging model — directly usable if you're building clinical image analysis features.",domain:"Open Source & Infra",industry:true},
+      {type:'tutorial',title:"Building HIPAA-compliant LLM pipelines — what actually needs to change",summary:"A practitioner guide to the technical requirements for running LLM inference on PHI data. Covers data residency, audit logging, BAA requirements, and model selection considerations.",source:"Dev.to",date:"Mar 11, 2026",relevance:"Mandatory reading before deploying any LLM in a healthcare context — covers the technical compliance layer most tutorials skip.",domain:"Enterprise AI",industry:true},
+    ],
+    general: [
+      {type:'github',title:"Qwen 3.5 series — 0.8B to 397B with optimised GGUF quantisation",summary:"Full range open-source model family. Strong coding benchmarks, compatible with Unsloth dynamic quantisation for efficient local deployment.",source:"Hugging Face",date:"Mar 14, 2026",relevance:"New competitive model family worth benchmarking against your stack.",domain:"Foundation Models",industry:false},
+      {type:'tutorial',title:"MCP server integration for LangChain agents — practical implementation guide",summary:"Step-by-step walkthrough of adding MCP server support to existing LangChain agents. Covers tool registration, session management, error handling.",source:"Dev.to",date:"Mar 12, 2026",relevance:"Implementation-ready — directly applicable for adding MCP to existing agent pipelines.",domain:"MCP Ecosystem",industry:false},
+    ]
+  },
+  enablement: {
+    healthcare: [
+      {type:'practitioner',title:"AI adoption in NHS trusts — what the rollout data actually shows",summary:"Analysis of 18-month AI adoption data across 12 NHS trusts. Key finding: teams with dedicated AI champions show 3x higher sustained adoption. Enablement structure matters more than tool quality.",source:"Health Service Journal",date:"Mar 10, 2026",relevance:"Direct evidence base for your enablement programme design — the data on what actually drives adoption in healthcare settings.",domain:"Enterprise AI",industry:true},
+      {type:'tutorial',title:"Designing AI enablement for clinical staff — lessons from 6 hospital deployments",summary:"Practitioner guide covering prompt training design for non-technical clinical users, change management sequencing, and how to handle AI resistance from senior clinicians.",source:"Substack / AI in Healthcare",date:"Mar 8, 2026",relevance:"Exactly your use case — clinical staff enablement is a specialised discipline this guide addresses directly.",domain:"Enterprise AI",industry:true},
+    ],
+    general: [
+      {type:'tutorial',title:"The C.T.O.E. framework for enterprise AI prompting — a workshop design guide",summary:"A structured framework for teaching enterprise users to write effective prompts: Context, Task, Output format, Examples. Includes workshop kit design and facilitator notes.",source:"Substack",date:"Mar 7, 2026",relevance:"A prompting framework directly applicable to your enablement workshop design.",domain:"Enterprise AI",industry:false},
+      {type:'news',title:"Anthropic launches The Anthropic Institute — studying AI's impact on jobs and the economy",summary:"Interdisciplinary initiative to study how AI disrupts jobs, legal systems, and the economy. Includes workforce displacement research and policy recommendations.",source:"Anthropic",date:"Mar 11, 2026",relevance:"Relevant context for enablement leads navigating employee anxiety about AI — gives you research-backed framing.",domain:"Enterprise AI",industry:false},
+    ]
+  }
+};
+
+let selectedRole = null, selectedIndustry = null, currentCat = 'all', isSearchMode = false;
+
+function buildModalGrids() {
+  document.getElementById('role-grid').innerHTML = ROLES.map(r =>
+    `<button class="modal-option" onclick="selectModalOption(this,'role','${r.id}')" data-id="${r.id}">
+      <span class="opt-icon">${r.icon}</span>
+      <span class="opt-label">${r.label}</span>
+      <span class="opt-sub">${r.sub}</span>
+    </button>`
+  ).join('');
+  document.getElementById('industry-grid').innerHTML = INDUSTRIES.map(i =>
+    `<button class="modal-option" onclick="selectModalOption(this,'industry','${i.id}')" data-id="${i.id}">
+      <span class="opt-icon">${i.icon}</span>
+      <span class="opt-label">${i.label}</span>
+    </button>`
+  ).join('');
+}
+
+function selectModalOption(el, type, id) {
+  const grid = type === 'role' ? 'role-grid' : 'industry-grid';
+  document.querySelectorAll(`#${grid} .modal-option`).forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  if(type === 'role') { selectedRole = id; document.getElementById('step1-btn').disabled = false; }
+  else { selectedIndustry = id; document.getElementById('step2-btn').disabled = false; }
+}
+
+function goStep2() {
+  document.getElementById('step1').classList.remove('active');
+  document.getElementById('step2').classList.add('active');
+}
+
+function finishOnboarding() {
+  document.getElementById('modal').style.display = 'none';
+  document.getElementById('context-bar').style.display = 'flex';
+  const roleObj = ROLES.find(r => r.id === selectedRole);
+  const indObj = INDUSTRIES.find(i => i.id === selectedIndustry);
+  document.getElementById('ctx-role-pill').textContent = roleObj.label;
+  document.getElementById('ctx-industry-pill').textContent = indObj.label;
+  document.getElementById('nav-ctx').textContent = `${roleObj.label} · ${indObj.label}`;
+  renderFeed();
+}
+
+function showModal() {
+  document.getElementById('modal').style.display = 'flex';
+  document.getElementById('step1').classList.add('active');
+  document.getElementById('step2').classList.remove('active');
+}
+
+function getFeedItems() {
+  const roleData = FEED_DATA[selectedRole] || FEED_DATA['pm'];
+  const indData = roleData[selectedIndustry] || [];
+  const genData = roleData['general'] || [];
+  return { industry: indData.filter(i => i.industry), general: genData.concat(indData.filter(i => !i.industry)) };
+}
+
+function renderFeed() {
+  const roleObj = ROLES.find(r => r.id === selectedRole);
+  const indObj = INDUSTRIES.find(i => i.id === selectedIndustry);
+  document.getElementById('feed-title').textContent = `Your AI Signal`;
+  document.getElementById('feed-meta').textContent = `${roleObj.label} × ${indObj.label}`;
+  const { industry, general } = getFeedItems();
+  const filterFn = i => currentCat === 'all' || i.type === currentCat;
+  const indFiltered = industry.filter(filterFn);
+  const genFiltered = general.filter(filterFn);
+
+  let html = '';
+  if(indFiltered.length) {
+    html += `<div class="feed-section-label">${indObj.label} AI — for ${roleObj.label}s</div>`;
+    html += indFiltered.map(cardHTML).join('');
+  }
+  if(genFiltered.length) {
+    html += `<div class="feed-section-label">General AI — for ${roleObj.label}s</div>`;
+    html += genFiltered.map(cardHTML).join('');
+  }
+  if(!html) html = '<div class="empty-state"><p>Nothing here yet.</p><small>Try a different category.</small></div>';
+  document.getElementById('feed-content').innerHTML = html;
+}
+
+function cardHTML(item) {
+  return `<div class="item-card">
+    <div>
+      <div class="item-tags">
+        <span class="tag ${TC[item.type]}">${TL[item.type]}</span>
+        <span class="tag">${item.domain}</span>
+        ${item.industry ? `<span class="tag tag-industry">${INDUSTRIES.find(i=>i.id===selectedIndustry)?.label || ''}</span>` : ''}
+      </div>
+      <div class="item-title">${item.title}</div>
+      <div class="item-summary">${item.summary}</div>
+      <div class="item-meta"><span class="item-source">${item.source}</span><span>·</span><span>${item.date}</span></div>
+      <div class="item-relevance">↳ ${item.relevance}</div>
+    </div>
+    <div class="item-arrow">↗</div>
+  </div>`;
+}
+
+function selectCat(el, cat) {
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentCat = cat;
+  if(!isSearchMode && selectedRole) renderFeed();
+}
+
+async function runSearch() {
+  const q = document.getElementById('search-input').value.trim();
+  if(!q) return;
+  isSearchMode = true;
+  const btn = document.getElementById('search-btn');
+  btn.disabled = true; btn.textContent = 'Searching…';
+  document.getElementById('feed-title').textContent = `Results for "${q}"`;
+  document.getElementById('feed-meta').textContent = '';
+  document.getElementById('feed-content').innerHTML = '<div class="loading"><div class="spinner"></div><span>Searching the AI knowledge library…</span></div>';
+  const roleLabel = ROLES.find(r=>r.id===selectedRole)?.label || 'AI Professional';
+  const indLabel = INDUSTRIES.find(i=>i.id===selectedIndustry)?.label || 'General';
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1200,system:`You are the AI Signal knowledge library. User role: ${roleLabel}. User industry: ${indLabel}. Return 4-5 search results as JSON array only (no markdown). Each: {title,summary,type:"news"|"tutorial"|"paper"|"product"|"github"|"practitioner",domain,source,relevance,industrySpecific:boolean}. Make results realistic and highly relevant to both the role AND industry.`,messages:[{role:"user",content:`Search: "${q}"`}]})});
+    const data = await res.json();
+    const results = JSON.parse(data.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim());
+    document.getElementById('feed-content').innerHTML = `<div class="search-status">Showing <span>${results.length} results</span> for "${q}" · ${roleLabel} × ${indLabel}</div>${results.map(r=>`<div class="result-card"><div class="item-tags"><span class="tag ${TC[r.type]||''}">${TL[r.type]||r.type}</span><span class="tag">${r.domain}</span>${r.industrySpecific?`<span class="tag tag-industry">${indLabel}</span>`:''}</div><div class="result-title">${r.title}</div><div class="result-body">${r.summary}</div><div class="item-relevance" style="margin-bottom:0.75rem">↳ ${r.relevance}</div><div class="item-meta"><span class="item-source">${r.source}</span></div></div>`).join('')}`;
+  } catch(e) {
+    document.getElementById('feed-content').innerHTML = '<div class="empty-state"><p>Search unavailable.</p><small>Browse the feed or try again shortly.</small></div>';
+  }
+  btn.disabled = false; btn.textContent = 'Search';
+}
+
 function renderTrending(){document.getElementById('trending-list').innerHTML=TR.map((t,i)=>`<div class="trending-item"><div class="trending-num">${i+1}</div><div class="trending-title">${t}</div></div>`).join('');}
-function renderDomains(){document.getElementById('domain-tags').innerHTML=DOM.map(d=>`<span class="domain-tag" onclick="document.getElementById('search-input').value='${d}';runSearch()">${d}</span>`).join('');}
-function selectRole(el,r){document.querySelectorAll('.role-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');role=r;document.getElementById('nav-role-label').textContent=r;document.getElementById('feed-meta').textContent=`Filtered for ${r}s`;searching=false;document.getElementById('feed-title').textContent='This week in AI';renderFeed(D[r]||[]);}
-function selectCat(el,c){document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');cat=c;if(!searching)renderFeed(D[role]||[]);}
-async function runSearch(){const q=document.getElementById('search-input').value.trim();if(!q)return;searching=true;const btn=document.getElementById('search-btn');btn.disabled=true;btn.textContent='Searching…';document.getElementById('feed-title').textContent=`Results for "${q}"`;document.getElementById('feed-meta').textContent=`Role: ${role}`;document.getElementById('feed-content').innerHTML='<div class="loading"><div class="spinner"></div><span>Searching the AI knowledge library…</span></div>';try{const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:`You are the AI Signal knowledge library. User role: ${role}. Return 4-5 search results as JSON array only (no markdown). Each: {title,summary,type:"news"|"tutorial"|"paper"|"product"|"github",domain,source,relevance,url:"#"}`,messages:[{role:"user",content:`Search: "${q}"`}]})});const data=await res.json();const results=JSON.parse(data.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim());document.getElementById('feed-content').innerHTML=`<div class="search-status">Showing <span>${results.length} results</span> for "${q}"</div>${results.map(r=>`<div class="result-card"><div class="item-tags"><span class="tag ${TC[r.type]||''}">${TL[r.type]||r.type}</span><span class="tag">${r.domain}</span></div><div class="result-title">${r.title}</div><div class="result-body">${r.summary}</div><div class="item-relevance" style="margin-bottom:0.75rem">↳ ${r.relevance}</div><div class="item-meta"><span class="item-source">${r.source}</span></div></div>`).join('')}`;}catch(e){document.getElementById('feed-content').innerHTML='<div class="empty-state"><p>Search unavailable.</p><small>Browse the feed below or try again shortly.</small></div>';}btn.disabled=false;btn.textContent='Search';}
+function renderDomains(){document.getElementById('domain-tags').innerHTML=DOMAINS.map(d=>`<span class="domain-tag" onclick="document.getElementById('search-input').value='${d}';runSearch()">${d}</span>`).join('');}
+
 document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter')runSearch();});
-renderFeed(D['AI Product Manager']);renderTrending();renderDomains();
+buildModalGrids();
+renderTrending();
+renderDomains();
 </script>
 </body>
 </html>
