@@ -20,6 +20,24 @@
   .nav-context{display:flex;align-items:center;gap:0.5rem;background:var(--g100);border:0.5px solid var(--g200);border-radius:100px;padding:0.3rem 0.9rem;font-size:0.8rem;font-weight:500;color:var(--g800);cursor:pointer;}
   .ctx-dot{width:6px;height:6px;border-radius:50%;background:var(--b);}
 
+  /* HAMBURGER */
+  .nav-hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;cursor:pointer;padding:4px;width:30px;height:30px;flex-shrink:0;}
+  .nav-hamburger span{display:block;width:22px;height:1.5px;background:var(--b);transition:transform 0.22s ease,opacity 0.22s ease;}
+  .nav-hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+  .nav-hamburger.open span:nth-child(2){opacity:0;}
+  .nav-hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+
+  /* MOBILE MENU */
+  .mobile-nav{display:none;position:fixed;inset:0;background:var(--w);z-index:95;padding:5.5rem 2rem 2rem;overflow-y:auto;}
+  .mobile-nav.open{display:flex;flex-direction:column;}
+  .mobile-nav-links{list-style:none;display:flex;flex-direction:column;}
+  .mobile-nav-links li a{display:block;font-family:var(--serif);font-size:2rem;color:var(--b);text-decoration:none;padding:0.85rem 0;border-bottom:0.5px solid var(--g200);letter-spacing:-0.02em;transition:color 0.15s;}
+  .mobile-nav-links li a.active{color:var(--g600);}
+  .mobile-nav-links li a:hover{color:var(--g600);}
+  .mobile-nav-role{margin-top:2rem;padding-top:1.5rem;border-top:0.5px solid var(--g200);}
+  .mobile-nav-role-label{font-size:0.72rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--g400);margin-bottom:0.75rem;}
+  .mobile-nav-set{display:inline-flex;align-items:center;gap:0.5rem;background:var(--g100);border:0.5px solid var(--g200);border-radius:100px;padding:0.4rem 1rem;font-size:0.85rem;font-weight:500;color:var(--g800);cursor:pointer;}
+
   /* ONBOARDING MODAL */
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem;}
   .modal{background:var(--w);border-radius:16px;padding:2.5rem;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;}
@@ -50,7 +68,7 @@
   .hero-sub{font-size:0.95rem;color:var(--g600);max-width:540px;line-height:1.65;}
 
   .context-bar{display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;border-bottom:0.5px solid var(--g200);border-top:0.5px solid var(--g200);background:var(--g50);}
-  .context-left{display:flex;align-items:center;gap:1rem;}
+  .context-left{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
   .context-pill{display:flex;align-items:center;gap:0.4rem;padding:0.3rem 0.8rem;border-radius:100px;background:var(--b);color:var(--w);font-size:0.78rem;font-weight:500;}
   .context-pill-industry{background:var(--g200);color:var(--g800);}
   .context-sep{color:var(--g400);font-size:0.8rem;}
@@ -60,7 +78,7 @@
   .search-bar{display:flex;align-items:center;margin:1.5rem 2.5rem;max-width:680px;border:1px solid var(--g200);border-radius:8px;overflow:hidden;transition:border-color 0.2s,box-shadow 0.2s;background:var(--w);}
   .search-bar:focus-within{border-color:var(--g600);box-shadow:0 0 0 3px rgba(0,0,0,0.06);}
   .search-icon{padding:0 0.875rem;color:var(--g400);font-size:1rem;flex-shrink:0;}
-  .search-input{flex:1;border:none;outline:none;font-family:var(--sans);font-size:0.9rem;color:var(--b);padding:0.8rem 0;background:transparent;}
+  .search-input{flex:1;border:none;outline:none;font-family:var(--sans);font-size:0.9rem;color:var(--b);padding:0.8rem 0;background:transparent;min-width:0;}
   .search-input::placeholder{color:var(--g400);}
   .search-btn{background:var(--b);color:var(--w);border:none;padding:0.75rem 1.25rem;font-family:var(--sans);font-size:0.82rem;font-weight:500;cursor:pointer;transition:background 0.15s;flex-shrink:0;}
   .search-btn:hover{background:var(--g800);}
@@ -74,7 +92,7 @@
 
   .main{display:grid;grid-template-columns:1fr 300px;max-width:1200px;margin:0 auto;}
   .feed{padding:2rem 2.5rem;border-right:0.5px solid var(--g200);min-height:600px;}
-  .feed-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.75rem;}
+  .feed-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:0.5rem;}
   .feed-title{font-family:var(--serif);font-size:1.25rem;letter-spacing:-0.01em;}
   .feed-meta{font-size:0.78rem;color:var(--g400);}
 
@@ -83,17 +101,18 @@
 
   .item-card{display:grid;grid-template-columns:1fr auto;gap:1rem;padding:1.25rem 0;border-bottom:0.5px solid var(--g200);cursor:pointer;}
   .item-card:hover .item-title{text-decoration:underline;text-decoration-color:var(--g400);}
+  .item-card:hover .item-arrow{transform:translate(2px,-2px);color:var(--b);}
+  .item-card.no-url{cursor:default;}
   .item-tags{display:flex;gap:0.4rem;margin-bottom:0.5rem;flex-wrap:wrap;}
   .tag{display:inline-block;padding:0.15rem 0.6rem;border-radius:100px;font-size:0.72rem;font-weight:500;background:var(--g100);color:var(--g800);}
   .tag-news{background:#fef3c7;color:#92400e;}.tag-tutorial{background:#dbeafe;color:#1e40af;}.tag-paper{background:#ede9fe;color:#5b21b6;}.tag-product{background:#dcfce7;color:#166534;}.tag-github{background:#fce7f3;color:#9d174d;}.tag-practitioner{background:#fff7ed;color:#9a3412;}
   .tag-industry{background:#f0fdf4;color:#166534;}
   .item-title{font-family:var(--serif);font-size:1.05rem;line-height:1.35;letter-spacing:-0.01em;color:var(--b);margin-bottom:0.4rem;}
   .item-summary{font-size:0.83rem;color:var(--g600);line-height:1.6;margin-bottom:0.5rem;}
-  .item-meta{display:flex;align-items:center;gap:0.75rem;font-size:0.75rem;color:var(--g400);}
+  .item-meta{display:flex;align-items:center;gap:0.75rem;font-size:0.75rem;color:var(--g400);flex-wrap:wrap;}
   .item-source{font-weight:500;color:var(--g600);}
   .item-relevance{font-size:0.72rem;color:var(--g400);font-style:italic;margin-top:0.3rem;}
   .item-arrow{font-size:1rem;color:var(--g400);align-self:flex-start;margin-top:0.25rem;transition:transform 0.15s,color 0.15s;}
-  .item-card:hover .item-arrow{transform:translate(2px,-2px);color:var(--b);}
 
   .sidebar{padding:2rem 1.75rem;}
   .sidebar-section{margin-bottom:2.5rem;}
@@ -117,15 +136,49 @@
   .empty-state{padding:3rem 0;text-align:center;color:var(--g400);}
   .empty-state p{font-family:var(--serif);font-size:1.1rem;font-style:italic;margin-bottom:0.5rem;}
 
-  @media(max-width:768px){.main{grid-template-columns:1fr;}.sidebar{display:none;}nav{padding:1rem 1.25rem;}.hero,.search-bar{padding-left:1.25rem;padding-right:1.25rem;}.search-bar{margin-left:1.25rem;margin-right:1.25rem;}.cat-tabs{padding:0 1.25rem;}.feed{padding:1.5rem 1.25rem;}.context-bar{padding:1rem 1.25rem;flex-direction:column;align-items:flex-start;gap:0.75rem;}}
+  @media(max-width:768px){
+    .main{grid-template-columns:1fr;}
+    .sidebar{display:none;}
+    nav{padding:1rem 1.25rem;}
+    .nav-links{display:none;}
+    .nav-context{display:none;}
+    .nav-hamburger{display:flex;}
+    .hero{padding:2rem 1.25rem 1.5rem;}
+    .hero h1{font-size:clamp(1.75rem,6vw,2.25rem);}
+    .context-bar{padding:0.875rem 1.25rem;}
+    .search-bar{margin:1rem 1.25rem;}
+    .cat-tabs{padding:0 1.25rem;}
+    .feed{padding:1.25rem 1.25rem;border-right:none;}
+    .modal{padding:1.75rem;}
+    .modal-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:400px){
+    .modal-grid{grid-template-columns:1fr;}
+  }
 </style>
 </head>
 <body>
 
+<!-- MOBILE NAV OVERLAY -->
+<div class="mobile-nav" id="mobile-nav">
+  <ul class="mobile-nav-links">
+    <li><a href="#" class="active" onclick="closeMobileMenu()">Browse</a></li>
+    <li><a href="#" onclick="closeMobileMenu()">Search</a></li>
+    <li><a href="foundations.html">Foundations</a></li>
+    <li><a href="#" onclick="closeMobileMenu()">Digest</a></li>
+  </ul>
+  <div class="mobile-nav-role">
+    <div class="mobile-nav-role-label">Your role</div>
+    <div class="mobile-nav-set" onclick="closeMobileMenu();showModal()">
+      <div class="ctx-dot"></div>
+      <span id="mobile-nav-ctx">Set your role</span>
+    </div>
+  </div>
+</div>
+
 <!-- ONBOARDING MODAL -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
-    <!-- Step 1: Role -->
     <div class="modal-step active" id="step1">
       <div class="modal-progress"><div class="progress-dot done"></div><div class="progress-dot"></div></div>
       <div class="modal-eyebrow">Step 1 of 2</div>
@@ -134,7 +187,6 @@
       <div class="modal-grid" id="role-grid"></div>
       <button class="modal-btn" id="step1-btn" disabled onclick="goStep2()">Continue →</button>
     </div>
-    <!-- Step 2: Industry -->
     <div class="modal-step" id="step2">
       <div class="modal-progress"><div class="progress-dot done"></div><div class="progress-dot done"></div></div>
       <div class="modal-eyebrow">Step 2 of 2</div>
@@ -158,6 +210,9 @@
     <div class="ctx-dot"></div>
     <span id="nav-ctx">Set your role</span>
   </div>
+  <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <div class="hero">
@@ -198,7 +253,7 @@
       <div class="feed-meta" id="feed-meta"></div>
     </div>
     <div id="feed-content">
-      <div class="empty-state"><p>Complete onboarding to see your personalised feed.</p><small>Click "Set your role" in the top right to get started.</small></div>
+      <div class="empty-state"><p>Complete onboarding to see your personalised feed.</p><small>Tap "Set your role" to get started.</small></div>
     </div>
   </div>
   <aside class="sidebar">
@@ -241,49 +296,63 @@ const DOMAINS=["Foundation Models","Agentic AI & Frameworks","MCP Ecosystem","AI
 const FEED_DATA = {
   pm: {
     healthcare: [
-      {type:'news',title:"FDA releases updated AI/ML guidance for medical device software — what PMs need to know",summary:"The FDA's new framework classifies AI-enabled medical devices by risk level and introduces 'predetermined change control plans' allowing continuous learning models to update without full re-approval.",source:"FDA / MedCity News",date:"Mar 14, 2026",relevance:"Direct regulatory constraint on any AI product touching clinical workflows — shapes your roadmap and compliance requirements.",domain:"Regulation & Policy",industry:true},
-      {type:'product',title:"Microsoft DAX Copilot expands to 500 health systems — ambient AI documentation now mainstream",summary:"Dragon Ambient eXperience Copilot, Microsoft's ambient AI for clinical documentation, crosses the 500 health system mark. Signals that AI scribe technology is no longer early-adopter territory.",source:"Microsoft Health Blog",date:"Mar 12, 2026",relevance:"Competitive signal — if you're building in clinical AI, ambient documentation is table stakes. Your differentiation needs to be elsewhere.",domain:"Enterprise AI",industry:true},
-      {type:'news',title:"Google launches Agent Development Kit (ADK) — multi-agent framework with MCP support",summary:"Google's open-source ADK lets developers compose agents across different models and tools. Built-in MCP server compatibility positions it as infrastructure for enterprise agentic workflows.",source:"Google DeepMind Blog",date:"Mar 15, 2026",relevance:"Platform-level decision — ADK is now a serious alternative to LangChain for enterprise agent development. Worth understanding before your next roadmap review.",domain:"Agentic AI & Frameworks",industry:false},
-      {type:'practitioner',title:"Building a production-ready Claude Code skill — what actually works",summary:"A practitioner walkthrough of implementing Claude Code skills in production. Covers prompt structure, error handling, testing methodology, and lessons from real deployments. From Towards Data Science.",source:"Towards Data Science",date:"Mar 11, 2026",relevance:"Directly applicable if you're building Claude-powered features — real implementation knowledge vs. theoretical docs.",domain:"AI Product & UX Design",industry:false},
+      {type:'news',title:"FDA releases updated AI/ML guidance for medical device software — what PMs need to know",summary:"The FDA's new framework classifies AI-enabled medical devices by risk level and introduces 'predetermined change control plans' allowing continuous learning models to update without full re-approval.",source:"FDA / MedCity News",date:"Mar 14, 2026",relevance:"Direct regulatory constraint on any AI product touching clinical workflows — shapes your roadmap and compliance requirements.",domain:"Regulation & Policy",industry:true,url:"https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-and-machine-learning-aiml-enabled-medical-devices"},
+      {type:'product',title:"Microsoft DAX Copilot expands to 500 health systems — ambient AI documentation now mainstream",summary:"Dragon Ambient eXperience Copilot, Microsoft's ambient AI for clinical documentation, crosses the 500 health system mark. Signals that AI scribe technology is no longer early-adopter territory.",source:"Microsoft Health Blog",date:"Mar 12, 2026",relevance:"Competitive signal — if you're building in clinical AI, ambient documentation is table stakes. Your differentiation needs to be elsewhere.",domain:"Enterprise AI",industry:true,url:"https://www.microsoft.com/en-us/microsoft-cloud/solutions/health-cloud/nuance-dax-copilot"},
+      {type:'news',title:"Google launches Agent Development Kit (ADK) — multi-agent framework with MCP support",summary:"Google's open-source ADK lets developers compose agents across different models and tools. Built-in MCP server compatibility positions it as infrastructure for enterprise agentic workflows.",source:"Google DeepMind Blog",date:"Mar 15, 2026",relevance:"Platform-level decision — ADK is now a serious alternative to LangChain for enterprise agent development. Worth understanding before your next roadmap review.",domain:"Agentic AI & Frameworks",industry:false,url:"https://developers.googleblog.com/en/agent-development-kit-easy-build-multi-agent-applications/"},
+      {type:'practitioner',title:"Building a production-ready Claude Code skill — what actually works",summary:"A practitioner walkthrough of implementing Claude Code skills in production. Covers prompt structure, error handling, testing methodology, and lessons from real deployments.",source:"Towards Data Science",date:"Mar 11, 2026",relevance:"Directly applicable if you're building Claude-powered features — real implementation knowledge vs. theoretical docs.",domain:"AI Product & UX Design",industry:false,url:"https://towardsdatascience.com"},
     ],
     finance: [
-      {type:'news',title:"SEC releases AI governance guidance for financial institutions — compliance timeline announced",summary:"The SEC's new guidance requires financial firms to document AI decision-making processes for investment recommendations and disclose AI use in client-facing products. 18-month compliance window.",source:"SEC / Financial Times",date:"Mar 13, 2026",relevance:"Regulatory constraint shaping every AI product roadmap in financial services — your compliance and legal teams need to see this.",domain:"Regulation & Policy",industry:true},
-      {type:'product',title:"Bloomberg launches BloombergGPT v2 — financial LLM now available via API to enterprise clients",summary:"BloombergGPT v2 trained on 50+ years of financial data offers significantly improved earnings call analysis, regulatory filing parsing, and market sentiment analysis. Available to Terminal subscribers.",source:"Bloomberg",date:"Mar 10, 2026",relevance:"Competitive intelligence — a domain-specific financial LLM from the market data leader is now an option for fintech PM roadmaps.",domain:"Foundation Models",industry:true},
-      {type:'news',title:"Nvidia announces NemoClaw — enterprise agentic AI platform for autonomous task execution",summary:"NemoClaw targets enterprise AI agent deployment with partners including SAP and Workday. Positions Nvidia as an end-to-end enterprise AI stack player beyond hardware.",source:"CNBC",date:"Mar 10, 2026",relevance:"Platform-level signal — enterprise agent infrastructure is consolidating. Relevant for any PM building automated financial workflows.",domain:"Agentic AI & Frameworks",industry:false},
+      {type:'news',title:"SEC releases AI governance guidance for financial institutions — compliance timeline announced",summary:"The SEC's new guidance requires financial firms to document AI decision-making processes for investment recommendations and disclose AI use in client-facing products. 18-month compliance window.",source:"SEC / Financial Times",date:"Mar 13, 2026",relevance:"Regulatory constraint shaping every AI product roadmap in financial services — your compliance and legal teams need to see this.",domain:"Regulation & Policy",industry:true,url:"https://www.sec.gov/rules-regulations"},
+      {type:'product',title:"Bloomberg launches BloombergGPT v2 — financial LLM now available via API to enterprise clients",summary:"BloombergGPT v2 trained on 50+ years of financial data offers significantly improved earnings call analysis, regulatory filing parsing, and market sentiment analysis.",source:"Bloomberg",date:"Mar 10, 2026",relevance:"Competitive intelligence — a domain-specific financial LLM from the market data leader is now an option for fintech PM roadmaps.",domain:"Foundation Models",industry:true,url:"https://www.bloomberg.com/company/press/bloomberggpt-50-billion-parameter-llm-specialized-finance/"},
+      {type:'news',title:"Nvidia announces NemoClaw — enterprise agentic AI platform for autonomous task execution",summary:"NemoClaw targets enterprise AI agent deployment with partners including SAP and Workday. Positions Nvidia as an end-to-end enterprise AI stack player beyond hardware.",source:"CNBC",date:"Mar 10, 2026",relevance:"Platform-level signal — enterprise agent infrastructure is consolidating. Relevant for any PM building automated financial workflows.",domain:"Agentic AI & Frameworks",industry:false,url:"https://www.nvidia.com/en-us/ai/"},
     ],
     legal: [
-      {type:'news',title:"American Bar Association issues formal AI ethics guidelines — hallucination liability clarified",summary:"The ABA's new guidance addresses attorney responsibility when using AI for legal research, establishing that lawyers remain fully liable for AI-generated content. Includes specific guidance on disclosure to clients.",source:"ABA Journal",date:"Mar 12, 2026",relevance:"Defines the compliance boundary for any AI product in the legal market — shapes what your product can and cannot automate.",domain:"Regulation & Policy",industry:true},
-      {type:'product',title:"Harvey AI raises $300M Series D — legal AI platform now valued at $3B",summary:"Harvey, the legal AI platform used by top-10 law firms, closes a major funding round. Expanding into contract lifecycle management and regulatory compliance automation.",source:"Bloomberg Law",date:"Mar 9, 2026",relevance:"Competitive funding signal — the legal AI market is consolidating fast. Harvey's expansion roadmap tells you where the category is heading.",domain:"Funding & Market",industry:true},
+      {type:'news',title:"American Bar Association issues formal AI ethics guidelines — hallucination liability clarified",summary:"The ABA's new guidance addresses attorney responsibility when using AI for legal research, establishing that lawyers remain fully liable for AI-generated content.",source:"ABA Journal",date:"Mar 12, 2026",relevance:"Defines the compliance boundary for any AI product in the legal market — shapes what your product can and cannot automate.",domain:"Regulation & Policy",industry:true,url:"https://www.americanbar.org/topics/"},
+      {type:'product',title:"Harvey AI raises $300M Series D — legal AI platform now valued at $3B",summary:"Harvey, the legal AI platform used by top-10 law firms, closes a major funding round. Expanding into contract lifecycle management and regulatory compliance automation.",source:"Bloomberg Law",date:"Mar 9, 2026",relevance:"Competitive funding signal — the legal AI market is consolidating fast. Harvey's expansion roadmap tells you where the category is heading.",domain:"Funding & Market",industry:true,url:"https://www.harvey.ai"},
     ],
     general: [
-      {type:'news',title:"Google launches Agent Development Kit (ADK) — open-source multi-agent framework",summary:"Google's ADK provides a unified framework for composing agents using different models and tools, with built-in MCP server support.",source:"Google DeepMind Blog",date:"Mar 15, 2026",relevance:"Major new player in the agentic framework space — directly relevant to your product roadmap.",domain:"Agentic AI & Frameworks",industry:false},
-      {type:'practitioner',title:"Building a production-ready Claude Code skill — what actually works",summary:"Real-world implementation guide for Claude Code skills in production. Covers prompt engineering, error handling, and testing.",source:"Towards Data Science",date:"Mar 11, 2026",relevance:"Practical implementation knowledge for PMs overseeing Claude-powered feature development.",domain:"AI Product & UX Design",industry:false},
-      {type:'tutorial',title:"Role-aware personalisation in AI products — UX patterns deep-dive",summary:"Shape of AI documents the Modes and Filters patterns for building AI products that adapt to user role and context.",source:"Shape of AI",date:"Mar 10, 2026",relevance:"Core design patterns for AI PMs — real examples from Claude, Notion AI, GitHub Copilot.",domain:"AI Product & UX Design",industry:false},
+      {type:'news',title:"Google launches Agent Development Kit (ADK) — open-source multi-agent framework",summary:"Google's ADK provides a unified framework for composing agents using different models and tools, with built-in MCP server support.",source:"Google DeepMind Blog",date:"Mar 15, 2026",relevance:"Major new player in the agentic framework space — directly relevant to your product roadmap.",domain:"Agentic AI & Frameworks",industry:false,url:"https://developers.googleblog.com/en/agent-development-kit-easy-build-multi-agent-applications/"},
+      {type:'practitioner',title:"Building a production-ready Claude Code skill — what actually works",summary:"Real-world implementation guide for Claude Code skills in production. Covers prompt engineering, error handling, and testing.",source:"Towards Data Science",date:"Mar 11, 2026",relevance:"Practical implementation knowledge for PMs overseeing Claude-powered feature development.",domain:"AI Product & UX Design",industry:false,url:"https://towardsdatascience.com"},
+      {type:'tutorial',title:"Role-aware personalisation in AI products — UX patterns deep-dive",summary:"Shape of AI documents the Modes and Filters patterns for building AI products that adapt to user role and context.",source:"Shape of AI",date:"Mar 10, 2026",relevance:"Core design patterns for AI PMs — real examples from Claude, Notion AI, GitHub Copilot.",domain:"AI Product & UX Design",industry:false,url:"https://www.shapeof.ai"},
     ]
   },
   eng: {
     healthcare: [
-      {type:'github',title:"MedSAM2 — Meta's Segment Anything Model fine-tuned for medical image segmentation hits 12k stars",summary:"Open-source medical imaging model achieving state-of-the-art results on CT, MRI, and pathology segmentation. MIT licensed, production-ready with ONNX export.",source:"GitHub Trending",date:"Mar 13, 2026",relevance:"Production-ready medical imaging model — directly usable if you're building clinical image analysis features.",domain:"Open Source & Infra",industry:true},
-      {type:'tutorial',title:"Building HIPAA-compliant LLM pipelines — what actually needs to change",summary:"A practitioner guide to the technical requirements for running LLM inference on PHI data. Covers data residency, audit logging, BAA requirements, and model selection considerations.",source:"Dev.to",date:"Mar 11, 2026",relevance:"Mandatory reading before deploying any LLM in a healthcare context — covers the technical compliance layer most tutorials skip.",domain:"Enterprise AI",industry:true},
+      {type:'github',title:"MedSAM2 — Meta's Segment Anything Model fine-tuned for medical image segmentation hits 12k stars",summary:"Open-source medical imaging model achieving state-of-the-art results on CT, MRI, and pathology segmentation. MIT licensed, production-ready with ONNX export.",source:"GitHub Trending",date:"Mar 13, 2026",relevance:"Production-ready medical imaging model — directly usable if you're building clinical image analysis features.",domain:"Open Source & Infra",industry:true,url:"https://github.com/facebookresearch/sam2"},
+      {type:'tutorial',title:"Building HIPAA-compliant LLM pipelines — what actually needs to change",summary:"A practitioner guide to the technical requirements for running LLM inference on PHI data. Covers data residency, audit logging, BAA requirements, and model selection considerations.",source:"Dev.to",date:"Mar 11, 2026",relevance:"Mandatory reading before deploying any LLM in a healthcare context — covers the technical compliance layer most tutorials skip.",domain:"Enterprise AI",industry:true,url:"https://dev.to"},
     ],
     general: [
-      {type:'github',title:"Qwen 3.5 series — 0.8B to 397B with optimised GGUF quantisation",summary:"Full range open-source model family. Strong coding benchmarks, compatible with Unsloth dynamic quantisation for efficient local deployment.",source:"Hugging Face",date:"Mar 14, 2026",relevance:"New competitive model family worth benchmarking against your stack.",domain:"Foundation Models",industry:false},
-      {type:'tutorial',title:"MCP server integration for LangChain agents — practical implementation guide",summary:"Step-by-step walkthrough of adding MCP server support to existing LangChain agents. Covers tool registration, session management, error handling.",source:"Dev.to",date:"Mar 12, 2026",relevance:"Implementation-ready — directly applicable for adding MCP to existing agent pipelines.",domain:"MCP Ecosystem",industry:false},
+      {type:'github',title:"Qwen 3.5 series — 0.8B to 397B with optimised GGUF quantisation",summary:"Full range open-source model family. Strong coding benchmarks, compatible with Unsloth dynamic quantisation for efficient local deployment.",source:"Hugging Face",date:"Mar 14, 2026",relevance:"New competitive model family worth benchmarking against your stack.",domain:"Foundation Models",industry:false,url:"https://huggingface.co/Qwen"},
+      {type:'tutorial',title:"MCP server integration for LangChain agents — practical implementation guide",summary:"Step-by-step walkthrough of adding MCP server support to existing LangChain agents. Covers tool registration, session management, error handling.",source:"Dev.to",date:"Mar 12, 2026",relevance:"Implementation-ready — directly applicable for adding MCP to existing agent pipelines.",domain:"MCP Ecosystem",industry:false,url:"https://dev.to"},
     ]
   },
   enablement: {
     healthcare: [
-      {type:'practitioner',title:"AI adoption in NHS trusts — what the rollout data actually shows",summary:"Analysis of 18-month AI adoption data across 12 NHS trusts. Key finding: teams with dedicated AI champions show 3x higher sustained adoption. Enablement structure matters more than tool quality.",source:"Health Service Journal",date:"Mar 10, 2026",relevance:"Direct evidence base for your enablement programme design — the data on what actually drives adoption in healthcare settings.",domain:"Enterprise AI",industry:true},
-      {type:'tutorial',title:"Designing AI enablement for clinical staff — lessons from 6 hospital deployments",summary:"Practitioner guide covering prompt training design for non-technical clinical users, change management sequencing, and how to handle AI resistance from senior clinicians.",source:"Substack / AI in Healthcare",date:"Mar 8, 2026",relevance:"Exactly your use case — clinical staff enablement is a specialised discipline this guide addresses directly.",domain:"Enterprise AI",industry:true},
+      {type:'practitioner',title:"AI adoption in NHS trusts — what the rollout data actually shows",summary:"Analysis of 18-month AI adoption data across 12 NHS trusts. Key finding: teams with dedicated AI champions show 3x higher sustained adoption. Enablement structure matters more than tool quality.",source:"Health Service Journal",date:"Mar 10, 2026",relevance:"Direct evidence base for your enablement programme design — the data on what actually drives adoption in healthcare settings.",domain:"Enterprise AI",industry:true,url:"https://www.hsj.co.uk"},
+      {type:'tutorial',title:"Designing AI enablement for clinical staff — lessons from 6 hospital deployments",summary:"Practitioner guide covering prompt training design for non-technical clinical users, change management sequencing, and how to handle AI resistance from senior clinicians.",source:"Substack / AI in Healthcare",date:"Mar 8, 2026",relevance:"Exactly your use case — clinical staff enablement is a specialised discipline this guide addresses directly.",domain:"Enterprise AI",industry:true,url:"https://substack.com"},
     ],
     general: [
-      {type:'tutorial',title:"The C.T.O.E. framework for enterprise AI prompting — a workshop design guide",summary:"A structured framework for teaching enterprise users to write effective prompts: Context, Task, Output format, Examples. Includes workshop kit design and facilitator notes.",source:"Substack",date:"Mar 7, 2026",relevance:"A prompting framework directly applicable to your enablement workshop design.",domain:"Enterprise AI",industry:false},
-      {type:'news',title:"Anthropic launches The Anthropic Institute — studying AI's impact on jobs and the economy",summary:"Interdisciplinary initiative to study how AI disrupts jobs, legal systems, and the economy. Includes workforce displacement research and policy recommendations.",source:"Anthropic",date:"Mar 11, 2026",relevance:"Relevant context for enablement leads navigating employee anxiety about AI — gives you research-backed framing.",domain:"Enterprise AI",industry:false},
+      {type:'tutorial',title:"The C.T.O.E. framework for enterprise AI prompting — a workshop design guide",summary:"A structured framework for teaching enterprise users to write effective prompts: Context, Task, Output format, Examples. Includes workshop kit design and facilitator notes.",source:"Substack",date:"Mar 7, 2026",relevance:"A prompting framework directly applicable to your enablement workshop design.",domain:"Enterprise AI",industry:false,url:"https://substack.com"},
+      {type:'news',title:"Anthropic launches The Anthropic Institute — studying AI's impact on jobs and the economy",summary:"Interdisciplinary initiative to study how AI disrupts jobs, legal systems, and the economy. Includes workforce displacement research and policy recommendations.",source:"Anthropic",date:"Mar 11, 2026",relevance:"Relevant context for enablement leads navigating employee anxiety about AI — gives you research-backed framing.",domain:"Enterprise AI",industry:false,url:"https://www.anthropic.com"},
     ]
   }
 };
 
 let selectedRole = null, selectedIndustry = null, currentCat = 'all', isSearchMode = false;
+
+function toggleMenu() {
+  const nav = document.getElementById('mobile-nav');
+  const btn = document.getElementById('hamburger');
+  const isOpen = nav.classList.toggle('open');
+  btn.classList.toggle('open');
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+
+function closeMobileMenu() {
+  document.getElementById('mobile-nav').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
 function buildModalGrids() {
   document.getElementById('role-grid').innerHTML = ROLES.map(r =>
@@ -322,6 +391,7 @@ function finishOnboarding() {
   document.getElementById('ctx-role-pill').textContent = roleObj.label;
   document.getElementById('ctx-industry-pill').textContent = indObj.label;
   document.getElementById('nav-ctx').textContent = `${roleObj.label} · ${indObj.label}`;
+  document.getElementById('mobile-nav-ctx').textContent = `${roleObj.label} · ${indObj.label}`;
   renderFeed();
 }
 
@@ -362,7 +432,9 @@ function renderFeed() {
 }
 
 function cardHTML(item) {
-  return `<div class="item-card">
+  const hasUrl = item.url && item.url !== '#';
+  const clickAttr = hasUrl ? `onclick="window.open('${item.url}','_blank','noopener,noreferrer')"` : '';
+  return `<div class="item-card${hasUrl ? '' : ' no-url'}" ${clickAttr}>
     <div>
       <div class="item-tags">
         <span class="tag ${TC[item.type]}">${TL[item.type]}</span>
@@ -374,7 +446,7 @@ function cardHTML(item) {
       <div class="item-meta"><span class="item-source">${item.source}</span><span>·</span><span>${item.date}</span></div>
       <div class="item-relevance">↳ ${item.relevance}</div>
     </div>
-    <div class="item-arrow">↗</div>
+    <div class="item-arrow">${hasUrl ? '↗' : ''}</div>
   </div>`;
 }
 
